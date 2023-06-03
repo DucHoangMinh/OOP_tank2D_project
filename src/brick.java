@@ -41,7 +41,7 @@ public class brick {
 	//Khai báo địa chỉ hình ảnh của hai loại gạch,và set cho tất cả viên gạch hiện lên
 	public brick()	
 	{
-		breakBrickImage=new ImageIcon("break_brick.jpg");
+		breakBrickImage=new ImageIcon("water1.png");
 		solidBrickImage=new ImageIcon("wall.jpg");	
 		treeBrickImage=new ImageIcon("tree2new.png");
 		//Vòng lặp này set cho trạng thái tất cả các viên gạch là 1,tức là cho trạng thái của chúng đang là hiện lên
