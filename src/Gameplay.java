@@ -41,6 +41,7 @@ public class Gameplay extends JPanel implements ActionListener
 		//Vẽ gạch mềm
 		br.draw(this, g);
 
+		//Vẽ 2 xe tank
 		tank1.paintTank1(g);
 		tank1.getPlayer_image().paintIcon(this, g, tank1.getPlayerX(), tank1.getPlayerY());
 
