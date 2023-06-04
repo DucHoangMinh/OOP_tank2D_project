@@ -150,8 +150,6 @@ public class Tank{
             player_image = new ImageIcon("player1_tank_left.png");
         else
             player_image = new ImageIcon("player1_tank_right.png");
-
-
     }
 
     public void paintTank2(Graphics g){
@@ -163,8 +161,6 @@ public class Tank{
              player_image = new ImageIcon("player2_tank_left.png");
          else
              player_image = new ImageIcon("player2_tank_right.png");
- 
- 
      }
 
 }
