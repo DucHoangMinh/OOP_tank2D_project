@@ -16,7 +16,15 @@ public class Gameplay extends JPanel implements ActionListener
 	private Timer timer;
 	private int delay=8;
 	
-	private boolean impact;
+	private boolean impact_up1 = true;
+	private boolean impact_down1 = true;
+	private boolean impact_right1 = true;
+	private boolean impact_left1 = true;
+
+	private boolean impact_up2 = true;
+	private boolean impact_down2 = true;
+	private boolean impact_right2 = true;
+	private boolean impact_left2 = true;
 
 	//khai báo đối tượng tank với các thuộc tính tương ứng
 	Tank tank1 = new Tank(50, 550, 5, 0, true, false, false, false, false);
@@ -197,7 +205,65 @@ public class Gameplay extends JPanel implements ActionListener
 					bulletShootDir2 = "";
 				}
 			}
+				
+			//Hàm check xe đụng tường cứng, true thì cho thực hiện lệnh di chuyển, false thì không cho đi tiếp
+				for(int i = 0; i < br.solidBricksXPos.length; i++){
+					if(new Rectangle(tank1.getPlayerX()+20, tank1.getPlayerY()+20, 40, 40).intersects(new Rectangle(br.solidBricksXPos[i]+20, br.solidBricksYPos[i]+20, 40, 40))){
+						if(tank1.getPlayer_up()){
+							impact_up1 = false;
+							impact_down1 = true;
+							impact_left1 = true;
+							impact_right1 = true;
+						}
+						else if(tank1.getPlayer_down()){
+							impact_up1 = true;
+							impact_down1 = false;
+							impact_left1 = true;
+							impact_right1 = true;
+						}
+						else if(tank1.getPlayer_left()){
+							impact_up1 = true;
+							impact_down1 = true;
+							impact_left1 = false;
+							impact_right1 = true;
+						}
+						else if(tank1.getPlayer_right()){
+							impact_up1 = true;
+							impact_down1 = true;
+							impact_left1 = true;
+							impact_right1 = false;
+						}
+					}
+				}
 
+				for(int i = 0; i < br.solidBricksXPos.length; i++){
+					if(new Rectangle(tank2.getPlayerX()+20, tank2.getPlayerY()+20, 40, 40).intersects(new Rectangle(br.solidBricksXPos[i]+20, br.solidBricksYPos[i]+20, 40, 40))){
+						if(tank2.getPlayer_up()){
+							impact_up2 = false;
+							impact_down2 = true;
+							impact_left2 = true;
+							impact_right2 = true;
+						}
+						else if(tank2.getPlayer_down()){
+							impact_up2 = true;
+							impact_down2 = false;
+							impact_left2 = true;
+							impact_right2 = true;
+						}
+						else if(tank2.getPlayer_left()){
+							impact_up2 = true;
+							impact_down2 = true;
+							impact_left2 = false;
+							impact_right2 = true;
+						}
+						else if(tank2.getPlayer_right()){
+							impact_up2 = true;
+							impact_down2 = true;
+							impact_left2 = true;
+							impact_right2 = false;
+						}
+					}
+				}
 		}
 
 
@@ -249,9 +315,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(false);
 
-				if(tank1.getPlayerY()>5){
+				if(tank1.getPlayerY()>5 && impact_up1){
 					tank1.setPlayerY(tank1.getPlayerY()-10);
 				}
+				impact_up1 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_S){
 				tank1.setPlayer_up(false);
@@ -259,9 +326,11 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(false);
 
-				if(tank1.getPlayerY()<700){
+				
+				if(tank1.getPlayerY()<700 && impact_down1){
 					tank1.setPlayerY(tank1.getPlayerY()+10);
 				}
+				impact_down1 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_A){
 				tank1.setPlayer_up(false);
@@ -269,9 +338,11 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(true);
 				tank1.setPlayer_right(false);
 
-				if(tank1.getPlayerX()>5){
+
+				if(tank1.getPlayerX()>5 && impact_left1){
 					tank1.setPlayerX(tank1.getPlayerX()-10);
 				}
+				impact_left1 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_D){
 				tank1.setPlayer_up(false);
@@ -279,9 +350,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(true);
 
-				if(tank1.getPlayerX()<950){
+				if(tank1.getPlayerX()<950 && impact_right1){
 					tank1.setPlayerX(tank1.getPlayerX()+10);
 				}
+				impact_right1 = true;
 			}
 
 			if(e.getKeyCode()== KeyEvent.VK_U)
@@ -328,9 +400,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerY()>5){
+				if(tank2.getPlayerY()>5 && impact_up2){
 					tank2.setPlayerY(tank2.getPlayerY()-10);
 				}
+				impact_up2 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_DOWN){
 				tank2.setPlayer_up(false);
@@ -338,9 +411,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerY()<700){
+				if(tank2.getPlayerY()<700 && impact_down2){
 					tank2.setPlayerY(tank2.getPlayerY()+10);
 				}
+				impact_down2 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_LEFT){
 				tank2.setPlayer_up(false);
@@ -348,9 +422,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(true);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerX()>5){
+				if(tank2.getPlayerX()>5 && impact_left2){
 					tank2.setPlayerX(tank2.getPlayerX()-10);
 				}
+				impact_left2 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_RIGHT){
 				tank2.setPlayer_up(false);
@@ -358,9 +433,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(true);
 
-				if(tank2.getPlayerX()<950){
+				if(tank2.getPlayerX()<950 && impact_right2){
 					tank2.setPlayerX(tank2.getPlayerX()+10);
 				}
+				impact_right2 = true;
 			}
 
 			if(e.getKeyCode()== KeyEvent.VK_M)
