@@ -25,6 +25,11 @@ public class Gameplay extends JPanel implements ActionListener
 	private Control controlTank1;
 	private Control_nother controlTank2;
 
+	private String bulletShootDir1 = "";//hướng của viên đạn
+	private String bulletShootDir2 = "";
+	private Bullet tank1Bullet = null;
+	private Bullet tank2Bullet = null;
+	private boolean play = true;
 
 	public Gameplay()
 	{	
@@ -69,7 +74,131 @@ public class Gameplay extends JPanel implements ActionListener
 		tank2.paintTank2(g);
 		tank2.getPlayer_image().paintIcon(this, g, tank2.getPlayerX(), tank2.getPlayerY());
 
-		
+		if(play){
+			if(tank1Bullet != null && tank1.isPlayer_shoot())//Xử lý đạn tank1
+			{
+				//Nếu hướng của đạn đang là rỗng,thì set cho hướng của đạn chính bằng hướng của xe tăng ngay lúc đó
+				if(bulletShootDir1.equals(""))
+				{
+					if(tank1.isPlayer_up())
+					{					
+						bulletShootDir1 = "up";
+					}
+					else if(tank1.isPlayer_down())
+					{					
+						bulletShootDir1 = "down";
+					}
+					else if(tank1.isPlayer_right())
+					{				
+						bulletShootDir1 = "right";
+					}
+					else if(tank1.isPlayer_left())
+					{			
+						bulletShootDir1 = "left";
+					}
+				}
+				//Hướng của đạn đã được xác định
+				//dùng hàm move để tịnh tiến 
+				//hàm draw để vẽ lại đường đạn sau khi tịnh tiến
+				else
+				{
+					tank1Bullet.move(bulletShootDir1);
+					tank1Bullet.draw(g);
+				}
+				//Xử lý khi phát hiện người chơi 2 có trúng đạn của người chơi 1 không
+				if(new Rectangle(tank1Bullet.getX(), tank1Bullet.getY(), 10, 10).intersects(new Rectangle(tank2.getPlayerX(),tank2.getPlayerY(), 50, 50)))
+				{
+					//Nếu chúng đạn thì tăng điểm người 1,trừ mạng người 2,hủy luôn viên đạn người 1...
+					tank1.setScore(tank1.getScore() + 10);
+					tank2.setHp(tank2.getHp() - 1);
+					tank1Bullet = null;
+					tank1.setPlayer_shoot(false);
+					bulletShootDir1 = "";
+				}
+				
+				//Dùng hàm checkCollision vs checkSolidCollision để kiểm tra đạn dính tường hay không
+				if(br.checkCollision(tank1Bullet.getX(), tank1Bullet.getY())
+						|| br.checkSolidCollision(tank1Bullet.getX(), tank1Bullet.getY()))
+				{
+					//nếu đạn dính tường,hủy bỏ viên đạn
+					tank1Bullet = null;
+					tank1.setPlayer_shoot(false);
+					bulletShootDir1 = "";			
+				}
+	
+				//Cái này để xem nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
+				if(tank1Bullet.getY() < 1 
+						|| tank1Bullet.getY() > 750
+						|| tank1Bullet.getX() < 1
+						|| tank1Bullet.getX() > 985)
+				{
+					tank1Bullet = null;
+					tank1.setPlayer_shoot(false);
+					bulletShootDir1 = "";
+				}
+			}
+
+
+			if(tank2Bullet != null && tank2.isPlayer_shoot())//Xử lý đạn tank2
+			{
+				//Nếu hướng của đạn đang là rỗng,thì set cho hướng của đạn chính bằng hướng của xe tăng ngay lúc đó
+				if(bulletShootDir2.equals(""))
+				{
+					if(tank2.isPlayer_up())
+					{					
+						bulletShootDir2 = "up";
+					}
+					else if(tank2.isPlayer_down())
+					{					
+						bulletShootDir2 = "down";
+					}
+					else if(tank2.isPlayer_right())
+					{				
+						bulletShootDir2 = "right";
+					}
+					else if(tank2.isPlayer_left())
+					{			
+						bulletShootDir2 = "left";
+					}
+				}
+				else
+				{
+					tank2Bullet.move(bulletShootDir2);
+					tank2Bullet.draw(g);
+				}
+				if(new Rectangle(tank2Bullet.getX(), tank2Bullet.getY(), 10, 10).intersects(new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(), 50, 50)))
+				{
+					//Nếu chúng đạn thì tăng điểm người 1,trừ mạng người 2,hủy luôn viên đạn người 1...
+					tank2.setScore(tank1.getScore() + 10);
+					tank1.setHp(tank2.getHp() - 1);
+					tank2Bullet = null;
+					tank2.setPlayer_shoot(false);
+					bulletShootDir2 = "";
+				}
+				
+				//Dùng hàm checkCollision để kiểm tra đạn dính tường hay không
+				if(br.checkCollision(tank2Bullet.getX(), tank2Bullet.getY())
+						|| br.checkSolidCollision(tank2Bullet.getX(), tank2Bullet.getY()))
+				{
+					//nếu đạn dính tường,hủy bỏ viên đạn
+					tank2Bullet = null;
+					tank2.setPlayer_shoot(false);
+					bulletShootDir2 = "";				
+				}
+	
+				//Cái này để xem nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
+				if(tank2Bullet.getY() < 1 
+						|| tank2Bullet.getY() > 750
+						|| tank2Bullet.getX() < 1
+						|| tank2Bullet.getX() > 985)
+				{
+					tank2Bullet = null;
+					tank2.setPlayer_shoot(false);
+					bulletShootDir2 = "";
+				}
+			}
+
+		}
 
 
 	}
@@ -130,6 +259,31 @@ public class Gameplay extends JPanel implements ActionListener
 				}
 			}
 
+			if(e.getKeyCode()== KeyEvent.VK_U)
+			{
+				if(!tank1.isPlayer_shoot())
+				{
+					if(tank1.isPlayer_up())
+					{					
+						tank1Bullet = new Bullet(tank1.getPlayerX() + 20, tank1.getPlayerY());
+					}
+					else if(tank1.isPlayer_down())
+					{					
+						tank1Bullet = new Bullet(tank1.getPlayerX() + 20, tank1.getPlayerY() + 40);
+					}
+					else if(tank1.isPlayer_right())
+					{				
+						tank1Bullet = new Bullet(tank1.getPlayerX() + 40, tank1.getPlayerY() + 20);
+					}
+					else if(tank1.isPlayer_left())
+					{			
+						tank1Bullet = new Bullet(tank1.getPlayerX(), tank1.getPlayerY() + 20);
+					}
+					
+					tank1.setPlayer_shoot(true);
+				}
+			}
+
 		}
 
 	}
@@ -181,6 +335,31 @@ public class Gameplay extends JPanel implements ActionListener
 
 				if(tank2.getPlayerX()<950){
 					tank2.setPlayerX(tank2.getPlayerX()+10);
+				}
+			}
+
+			if(e.getKeyCode()== KeyEvent.VK_M)
+			{
+				if(!tank2.isPlayer_shoot())
+				{
+					if(tank2.isPlayer_up())
+					{					
+						tank2Bullet = new Bullet(tank2.getPlayerX() + 20, tank2.getPlayerY());
+					}
+					else if(tank2.isPlayer_down())
+					{					
+						tank2Bullet = new Bullet(tank2.getPlayerX() + 20, tank2.getPlayerY() + 40);
+					}
+					else if(tank2.isPlayer_right())
+					{				
+						tank2Bullet = new Bullet(tank2.getPlayerX() + 40, tank2.getPlayerY() + 20);
+					}
+					else if(tank2.isPlayer_left())
+					{			
+						tank2Bullet = new Bullet(tank2.getPlayerX(), tank2.getPlayerY() + 20);
+					}
+					
+					tank2.setPlayer_shoot(true);
 				}
 			}
 		}
