@@ -218,6 +218,31 @@ public class Gameplay extends JPanel implements ActionListener
 		public void keyReleased(KeyEvent e) {}
 		
 		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode()== KeyEvent.VK_SPACE && (tank1.getHp() == 0 || tank2.getHp() == 0))
+			{
+				br = new brick();
+				tank1.setPlayerX(50);
+				tank1.setPlayerY(550);	
+				tank1.setPlayer_down(false);
+				tank1.setPlayer_left(false);
+				tank1.setPlayer_right(false);
+				tank1.setPlayer_up(true);	
+				
+				tank2.setPlayerX(900);
+				tank2.setPlayerY(150);	
+				tank2.setPlayer_up(false);
+				tank2.setPlayer_right(false);
+				tank2.setPlayer_left(false);
+				tank2.setPlayer_down(true);	
+				
+				tank1.setScore(0);
+				tank1.setHp(5);
+				tank2.setScore(0);
+				tank2.setHp(5);
+				play = true;
+				repaint();
+			}
+
 			if(e.getKeyCode()==KeyEvent.VK_W){
 				tank1.setPlayer_up(true);
 				tank1.setPlayer_down(false);
