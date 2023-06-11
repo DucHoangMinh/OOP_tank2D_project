@@ -69,6 +69,7 @@ public class Gameplay extends JPanel implements ActionListener
 
 		tank2.paintTank2(g);
 		tank2.getPlayer_image().paintIcon(this, g, tank2.getPlayerX(), tank2.getPlayerY());
+		
 		if(play){
 			if(tank1Bullet != null && tank1.isPlayer_shoot())//Xử lý đạn tank1
 			{
