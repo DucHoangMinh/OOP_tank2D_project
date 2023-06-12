@@ -24,6 +24,7 @@ public class Tank{
 
     //hình ảnh của tank
     private ImageIcon player_image;
+    private int player1Y;
 
     //getter vs setter
     public int getPlayerX() {
@@ -162,5 +163,7 @@ public class Tank{
          else
              player_image = new ImageIcon("player2_tank_right.png");
      }
+
+    
 
 }
