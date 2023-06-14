@@ -40,7 +40,7 @@ public class Bullet {
 		return (int)x;
 	}
 	public int getY()
-	{
+ 	{
 		return (int)y;
 	}
 }
