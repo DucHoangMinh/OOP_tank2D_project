@@ -214,7 +214,7 @@ public class Gameplay extends JPanel implements ActionListener
 				
 			//Hàm check xe đụng tường cứng, true thì cho thực hiện lệnh di chuyển, false thì không cho đi tiếp
 				for(int i = 0; i < br.solidBricksXPos.length; i++){
-					if(new Rectangle(tank1.getPlayerX(), tank1.getPlayerY(), 50, 50)
+					if(new Rectangle(tank1.getPlayerX(), tank1.getPlayerY() + 10, 50, 50)
 						.intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
 					|| new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(),50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
 						if(tank1.getPlayer_up()){
@@ -245,7 +245,7 @@ public class Gameplay extends JPanel implements ActionListener
 				}
 
 				for(int i = 0; i < br.solidBricksXPos.length; i++){
-					if(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50).intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
+					if(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY() + 10, 50, 50).intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
 					|| new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(),50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
 						if(tank2.getPlayer_up()){
 							impact_up2 = false;
@@ -303,9 +303,6 @@ public class Gameplay extends JPanel implements ActionListener
 			e.printStackTrace();
 		}
 
-		
-	
-
 		//Xử lý nếu mạng của người 1 hoặc người 2 chỉ còn 0 (chết)
 		if(tank1.getHp() == 0 || tank2.getHp() == 0)
 		{
@@ -319,17 +316,6 @@ public class Gameplay extends JPanel implements ActionListener
 			g.setFont(new Font("sans-serif",Font.BOLD, 30));
 			g.drawString("(Space to Restart)",330,430);
 		}
-		// else if(tank2.getHp() == 0)
-		// {
-		// 	g.setColor(Color.white);
-		// 	g.setFont(new Font("sans-serif",Font.BOLD, 60));
-		// 	g.drawString("Game Over", 300,300);
-		// 	g.drawString("Player 1 Won", 280,380);
-		// 	g.setColor(Color.white);
-		// 	g.setFont(new Font("sans-serif",Font.BOLD, 30));
-		// 	g.drawString("(Space to Restart)", 230,430);
-		// 	play = false;
-		// }
 		g.dispose();
 	}
 
