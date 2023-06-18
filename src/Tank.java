@@ -86,7 +86,6 @@ public class Tank{
     public boolean isPlayer_left() {
         return this.player_left;
     }
-
     public boolean getPlayer_left() {
         return this.player_left;
     }
@@ -144,13 +143,13 @@ public class Tank{
     //phương thức vẽ tank 4 hướng
     public void paintTank1(Graphics g){
        if(player_up)
-            player_image = new ImageIcon("player1_tank_up.png");
+            player_image = new ImageIcon("tank1up.png");
         else if(player_down)
-            player_image = new ImageIcon("player1_tank_down.png");
+            player_image = new ImageIcon("tank1down.png");
         else if(player_left)
-            player_image = new ImageIcon("player1_tank_left.png");
+            player_image = new ImageIcon("tank1left.png");
         else
-            player_image = new ImageIcon("player1_tank_right.png");
+            player_image = new ImageIcon("tank1right.png");
     }
 
     public void paintTank2(Graphics g){

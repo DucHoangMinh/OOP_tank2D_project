@@ -1,12 +1,15 @@
 import java.util.*;
 import java.util.ResourceBundle.Control;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.security.Key;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
-
+import java.awt.Image;
 import java.awt.*;
-
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
@@ -15,7 +18,7 @@ public class Gameplay extends JPanel implements ActionListener
 	private brick br;
 
 	private Timer timer;
-	private int delay=8;
+	private int delay=5;
 	
 	private boolean impact_up1 = true;
 	private boolean impact_down1 = true;
@@ -28,8 +31,8 @@ public class Gameplay extends JPanel implements ActionListener
 	private boolean impact_left2 = true;
 
 	//khai báo đối tượng tank với các thuộc tính tương ứng
-	Tank tank1 = new Tank(50, 550, 5, 0, true, false, false, false, false);
-	Tank tank2 = new Tank(900, 150, 5, 0, false, true, false, false, false);
+	private Tank tank1 = new Tank(50, 550, 5, 0, true, false, false, false, false);
+	private Tank tank2 = new Tank(100, 200, 5, 0, false, true, false, false, false);
 
 	
 	
@@ -42,7 +45,7 @@ public class Gameplay extends JPanel implements ActionListener
 	private Control controlTank1;
 	private Control_nother controlTank2;
 
-
+	
 	public Gameplay()
 	{	
 		//Nhét tường vào frame (đoạn này vẫn chưa hiện lên tường đâu,phải paint nó nữa)
@@ -52,6 +55,7 @@ public class Gameplay extends JPanel implements ActionListener
 		controlTank2 = new Control_nother();
 
 		setFocusable(true);
+		setFocusTraversalKeysEnabled(true);
 
 		addKeyListener(controlTank1);
 		addKeyListener(controlTank2);
@@ -60,18 +64,17 @@ public class Gameplay extends JPanel implements ActionListener
 		timer.start();
 	}
 	
-	//Đoạn này vẽ tất cả mọi thứ hiện ra trước mắt người nhìn,anh em vào main chạy project để nó
-	//hiện cái frame chính lên cho dễ hiểu nhá
+
 	public void paint(Graphics g)
 	{    		
 		//Vẽ phần chơi game
 		g.setColor(Color.black);
-		g.fillRect(0, 0, 1000, 1000);
+		g.fillRect(0, 0, 1100, 1000);
 		
-		//Vẽ phần bảng điểm bên tay phải
-		//g.setColor(Color.DARK_GRAY);
-		g.fillRect(660, 0, 140, 600);
-		
+		//Vẽ nền phần điểm số tay phải
+		g.setColor(Color.WHITE);
+		g.fillRect(1000, 0, 340, 800);
+
 		//Vẽ gạch cứng
 		br.drawSolids(this, g);
 		br.drawTree(this, g);
@@ -138,7 +141,7 @@ public class Gameplay extends JPanel implements ActionListener
 					bulletShootDir1 = "";			
 				}
 	
-				//Cái này để xem nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
+				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
 				if(tank1Bullet.getY() < 1 
 						|| tank1Bullet.getY() > 750
 						|| tank1Bullet.getX() < 1
@@ -181,8 +184,8 @@ public class Gameplay extends JPanel implements ActionListener
 				if(new Rectangle(tank2Bullet.getX(), tank2Bullet.getY(), 10, 10).intersects(new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(), 50, 50)))
 				{
 					//Nếu chúng đạn thì tăng điểm người 1,trừ mạng người 2,hủy luôn viên đạn người 1...
-					tank2.setScore(tank1.getScore() + 10);
-					tank1.setHp(tank2.getHp() - 1);
+					tank2.setScore(tank2.getScore() + 10);
+					tank1.setHp(tank1.getHp() - 1);
 					tank2Bullet = null;
 					tank2.setPlayer_shoot(false);
 					bulletShootDir2 = "";
@@ -198,7 +201,7 @@ public class Gameplay extends JPanel implements ActionListener
 					bulletShootDir2 = "";				
 				}
 	
-				//Cái này để xem nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
+				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
 				if(tank2Bullet.getY() < 1 
 						|| tank2Bullet.getY() > 750
 						|| tank2Bullet.getX() < 1
@@ -212,7 +215,9 @@ public class Gameplay extends JPanel implements ActionListener
 				
 			//Hàm check xe đụng tường cứng, true thì cho thực hiện lệnh di chuyển, false thì không cho đi tiếp
 				for(int i = 0; i < br.solidBricksXPos.length; i++){
-					if(new Rectangle(tank1.getPlayerX()+20, tank1.getPlayerY()+20, 40, 40).intersects(new Rectangle(br.solidBricksXPos[i]+20, br.solidBricksYPos[i]+20, 40, 40))){
+					if(new Rectangle(tank1.getPlayerX(), tank1.getPlayerY() + 10, 50, 50)
+						.intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
+					|| new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(),50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
 						if(tank1.getPlayer_up()){
 							impact_up1 = false;
 							impact_down1 = true;
@@ -241,7 +246,8 @@ public class Gameplay extends JPanel implements ActionListener
 				}
 
 				for(int i = 0; i < br.solidBricksXPos.length; i++){
-					if(new Rectangle(tank2.getPlayerX()+20, tank2.getPlayerY()+20, 40, 40).intersects(new Rectangle(br.solidBricksXPos[i]+20, br.solidBricksYPos[i]+20, 40, 40))){
+					if(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY() + 10, 50, 50).intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
+					|| new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(),50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
 						if(tank2.getPlayer_up()){
 							impact_up2 = false;
 							impact_down2 = true;
@@ -269,8 +275,49 @@ public class Gameplay extends JPanel implements ActionListener
 					}
 				}
 		}
+		//Vẽ phần bảng điểm bên tay phải
+		g.setColor(Color.black);
+		g.setFont(new Font("sans-serif",Font.BOLD, 15));
+		g.drawString("Scores", 1070,60);
+		g.drawString("Player 1:  "+ tank1.getScore(), 1030,90);
+		g.drawString("Player 2:  "+ tank2.getScore(), 1030,120);
+		// g.drawRect(1050, 100, tank1.getHp()*20, 20);;
+		
+		g.drawString("Lives", 1070,180);
+		g.drawString("Player 1 : ", 1020, 210);
+		// g.drawString("Player 1:  "+ tank1.getHp(), 1030,180);
+		File file1 = new File("live_" + tank1.getHp() + ".png");
+		try {
+			Image image = ImageIO.read(file1);
+			g.drawImage(image, 1090, 195, tank1.getHp() * 20, 20, getFocusCycleRootAncestor());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		g.drawString("Player 2:  ", 1020,240);
+		File file2 = new File("live_" + tank2.getHp() + ".png");
+		try {
+			Image image = ImageIO.read(file2);
+			g.drawImage(image, 1090, 225, tank2.getHp() * 20, 20, getFocusCycleRootAncestor());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-
+		//Xử lý nếu mạng của người 1 hoặc người 2 chỉ còn 0 (chết)
+		if(tank1.getHp() == 0 || tank2.getHp() == 0)
+		{
+			g.fillRect(0,0,1000,1000);
+			g.setColor(Color.white);
+			g.setFont(new Font("san-serif",Font.BOLD, 60));
+			g.drawString("Game Over", 300,300);
+			g.drawString("Player 2 Won", 280,380);
+			play = false;
+			g.setColor(Color.white);
+			g.setFont(new Font("sans-serif",Font.BOLD, 30));
+			g.drawString("(Space to Restart)",330,430);
+		}
+		g.dispose();
 	}
 
 	@Override
