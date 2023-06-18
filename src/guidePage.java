@@ -17,16 +17,14 @@ public class guidePage extends JPanel{
         JLabel guideLabel = new JLabel();
         ImageIcon help = new ImageIcon("help.png");
         JPanel panel = new JPanel();
-
+        
+        backButton.setBounds(500, 500, 200, 50);
+        guideLabel.setBounds(50, -150, 1150, 1000);
+        //guideLabel.setText("<html>Đây là hướng dẫn dòng 1<br/>Đây là hướng dẫn dòng 2 <br/>Đây là hướng dẫn dòng 3 <br/>Dây là hướng dẫn dòng 4</html>");
+        //guideLabel.setFont(new Font("sans-serif", Font.BOLD, 30));
         guideLabel.setIcon(help);
-        guideLabel.setBounds(0, 0, 1000, 1000);
-        panel.add(guideLabel);
-        this.add(panel);
-
-        guideLabel.setText("<html>Đây là hướng dẫn dòng 1<br/>Đây là hướng dẫn dòng 2 <br/>Đây là hướng dẫn dòng 3 <br/>Dây là hướng dẫn dòng 4</html>");
-        guideLabel.setFont(new Font("sans-serif", Font.BOLD, 30));
         this.add(backButton);
-        //this.add(guideLabel);
+        this.add(guideLabel);
         this.setLayout(null);
         backButton.addActionListener(e -> {
             this.setVisible(false);
