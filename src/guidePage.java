@@ -15,6 +15,8 @@ public class guidePage extends JPanel{
 
         backButton.setBounds(500, 500, 200, 50);
         guideLabel.setBounds(300, 0, 800, 500);
+
+
         guideLabel.setText("<html>Đây là hướng dẫn dòng 1<br/>Đây là hướng dẫn dòng 2 <br/>Đây là hướng dẫn dòng 3 <br/>Dây là hướng dẫn dòng 4</html>");
         guideLabel.setFont(new Font("sans-serif", Font.BOLD, 30));
         this.add(backButton);

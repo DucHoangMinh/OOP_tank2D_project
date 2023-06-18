@@ -76,7 +76,7 @@ public class Gameplay extends JPanel implements ActionListener
 		
 		//Vẽ nền phần điểm số tay phải
 		g.setColor(Color.WHITE);
-		g.fillRect(1000, 0, 340, 800);
+		g.fillRect(1000, 0, 340, 1000);
 
 		//Vẽ gạch cứng
 		br.drawSolids(this, g);
