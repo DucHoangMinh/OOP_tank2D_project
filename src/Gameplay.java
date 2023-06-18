@@ -7,7 +7,7 @@ import java.security.Key;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.Image;
+
 import java.awt.*;
 import java.awt.*;
 import javax.swing.*;
@@ -33,19 +33,34 @@ public class Gameplay extends JPanel implements ActionListener
 	//khai báo đối tượng tank với các thuộc tính tương ứng
 	private Tank tank1 = new Tank(50, 550, 5, 0, true, false, false, false, false);
 	private Tank tank2 = new Tank(100, 200, 5, 0, false, true, false, false, false);
-
-	
 	
 	private String bulletShootDir1 = "";//hướng của viên đạn
 	private String bulletShootDir2 = "";
 	private Bullet tank1Bullet = null;
 	private Bullet tank2Bullet = null;
 	private boolean play = true;
-	
 	private Control controlTank1;
 	private Control_nother controlTank2;
 
-	
+	//Biến lưu trữ cái đếm ngược
+	private int countDownSeconds = 120;
+	private Timer cdTimer;
+
+	// public void countDonw(){
+	// 	 cdTimer = new Timer(1000, new ActionListener() {
+    //         @Override
+    //         public void actionPerformed(ActionEvent e) {
+    //             countDownSeconds--;
+	// 			System.out.println(countDownSeconds);
+
+    //             if (countDownSeconds <= 0) {
+    //                 cdTimer.stop();
+    //             }
+    //         }
+    //     });
+    //     cdTimer.start();
+	// }
+
 	public Gameplay()
 	{	
 		//Nhét tường vào frame (đoạn này vẫn chưa hiện lên tường đâu,phải paint nó nữa)
@@ -62,9 +77,24 @@ public class Gameplay extends JPanel implements ActionListener
 
 		timer = new Timer(delay, this);
 		timer.start();
+		// cdTimer.start();
 	}
 	
-
+	public boolean checkTankHitBrick(int x,int y){
+		for(int i = 0; i < br.bricksXPos.length; i++){
+			if(new Rectangle(x, y, 50, 50).intersects(new
+			Rectangle(br.bricksXPos[i], br.bricksYPos[i], 50, 50))){
+				return true;
+			} 
+		}
+		for(int i = 0; i < br.solidBricksXPos.length; i++){
+			if(new Rectangle(x, y, 50, 50).intersects(new
+			Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))){
+				return true;
+			} 
+		}
+		return false;
+	}
 	public void paint(Graphics g)
 	{    		
 		//Vẽ phần chơi game
@@ -211,68 +241,6 @@ public class Gameplay extends JPanel implements ActionListener
 					bulletShootDir2 = "";
 				}
 			}
-				
-			//Hàm check xe đụng tường cứng, true thì cho thực hiện lệnh di chuyển, false thì không cho đi tiếp
-				for(int i = 0; i < br.solidBricksXPos.length; i++){
-					if(new Rectangle(tank1.getPlayerX(), tank1.getPlayerY() + 10, 50, 50)
-						.intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
-					|| new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(),50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
-						if(tank1.getPlayer_up()){
-							impact_up1 = false;
-							impact_down1 = true;
-							impact_left1 = true;
-							impact_right1 = true;
-						}
-						else if(tank1.getPlayer_down()){
-							impact_up1 = true;
-							impact_down1 = false;
-							impact_left1 = true;
-							impact_right1 = true;
-						}
-						else if(tank1.getPlayer_left()){
-							impact_up1 = true;
-							impact_down1 = true;
-							impact_left1 = false;
-							impact_right1 = true;
-						}
-						else if(tank1.getPlayer_right()){
-							impact_up1 = true;
-							impact_down1 = true;
-							impact_left1 = true;
-							impact_right1 = false;
-						}
-					}
-				}
-
-				for(int i = 0; i < br.solidBricksXPos.length; i++){
-					if(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY() + 10, 50, 50).intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
-					|| new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(),50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
-						if(tank2.getPlayer_up()){
-							impact_up2 = false;
-							impact_down2 = true;
-							impact_left2 = true;
-							impact_right2 = true;
-						}
-						else if(tank2.getPlayer_down()){
-							impact_up2 = true;
-							impact_down2 = false;
-							impact_left2 = true;
-							impact_right2 = true;
-						}
-						else if(tank2.getPlayer_left()){
-							impact_up2 = true;
-							impact_down2 = true;
-							impact_left2 = false;
-							impact_right2 = true;
-						}
-						else if(tank2.getPlayer_right()){
-							impact_up2 = true;
-							impact_down2 = true;
-							impact_left2 = true;
-							impact_right2 = false;
-						}
-					}
-				}
 		}
 		//Vẽ phần bảng điểm bên tay phải
 		g.setColor(Color.black);
@@ -284,6 +252,7 @@ public class Gameplay extends JPanel implements ActionListener
 		
 		g.drawString("Lives", 1070,180);
 		g.drawString("Player 1 : ", 1020, 210);
+		g.drawString("Time remain : " + countDownSeconds, 1020, 300);
 		// g.drawString("Player 1:  "+ tank1.getHp(), 1030,180);
 		File file1 = new File("live_" + tank1.getHp() + ".png");
 		try {
@@ -450,8 +419,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerY()>5 && impact_up2){
-					tank2.setPlayerY(tank2.getPlayerY()-10);
+				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() - 10) == false){
+					if(tank2.getPlayerY()>5 && impact_up2){
+						tank2.setPlayerY(tank2.getPlayerY()-10);
+					}
 				}
 				impact_up2 = true;
 			}
@@ -461,8 +432,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerY()<700 && impact_down2){
-					tank2.setPlayerY(tank2.getPlayerY()+10);
+				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() + 10) == false){
+					if(tank2.getPlayerY()<700 && impact_down2){
+						tank2.setPlayerY(tank2.getPlayerY()+10);
+					}
 				}
 				impact_down2 = true;
 			}
@@ -472,8 +445,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(true);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerX()>5 && impact_left2){
-					tank2.setPlayerX(tank2.getPlayerX()-10);
+				if(checkTankHitBrick(tank2.getPlayerX() - 10,tank2.getPlayerY()) == false){
+					if(tank2.getPlayerX()>5 && impact_left2){
+						tank2.setPlayerX(tank2.getPlayerX()-10);
+					}
 				}
 				impact_left2 = true;
 			}
@@ -482,9 +457,11 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_down(false);
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(true);
-
-				if(tank2.getPlayerX()<950 && impact_right2){
-					tank2.setPlayerX(tank2.getPlayerX()+10);
+								
+				if(checkTankHitBrick(tank2.getPlayerX() + 10,tank2.getPlayerY()) == false){
+					if(tank2.getPlayerX()<950 && impact_right2){
+						tank2.setPlayerX(tank2.getPlayerX()+10);
+					}
 				}
 				impact_right2 = true;
 			}
