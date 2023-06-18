@@ -20,6 +20,7 @@ public class Gameplay extends JPanel implements ActionListener
 	private Timer timer;
 	private int delay=5;
 	
+	//Khai báo trạng thái va chạm với tường của tank
 	private boolean impact_up1 = true;
 	private boolean impact_down1 = true;
 	private boolean impact_right1 = true;
@@ -29,6 +30,8 @@ public class Gameplay extends JPanel implements ActionListener
 	private boolean impact_down2 = true;
 	private boolean impact_right2 = true;
 	private boolean impact_left2 = true;
+	//************************************* */
+
 
 	//khai báo đối tượng tank với các thuộc tính tương ứng
 	private Tank tank1 = new Tank(50, 550, 5, 0, true, false, false, false, false);
