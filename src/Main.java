@@ -28,5 +28,6 @@ public class Main {
         map.add(start);
         ImageIcon image= new ImageIcon("logo.png", null);// creat an ImageIcon
     	map.setIconImage(image.getImage());// logo
+		//test branch mới
 	}
 }
