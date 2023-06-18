@@ -43,23 +43,21 @@ public class Gameplay extends JPanel implements ActionListener
 	private Control_nother controlTank2;
 
 	//Biến lưu trữ cái đếm ngược
-	private int countDownSeconds = 120;
+	private int countDownSeconds = 20;
 	private Timer cdTimer;
 
-	// public void countDonw(){
-	// 	 cdTimer = new Timer(1000, new ActionListener() {
-    //         @Override
-    //         public void actionPerformed(ActionEvent e) {
-    //             countDownSeconds--;
-	// 			System.out.println(countDownSeconds);
-
-    //             if (countDownSeconds <= 0) {
-    //                 cdTimer.stop();
-    //             }
-    //         }
-    //     });
-    //     cdTimer.start();
-	// }
+	public void countDonw(){
+		 cdTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countDownSeconds--;
+                if (countDownSeconds <= 0) {
+                    cdTimer.stop();
+                }
+            }
+        });
+        cdTimer.start();
+	}
 
 	public Gameplay()
 	{	
@@ -77,7 +75,7 @@ public class Gameplay extends JPanel implements ActionListener
 
 		timer = new Timer(delay, this);
 		timer.start();
-		// cdTimer.start();
+		countDonw();
 	}
 	
 	public boolean checkTankHitBrick(int x,int y){
@@ -252,8 +250,7 @@ public class Gameplay extends JPanel implements ActionListener
 		
 		g.drawString("Lives", 1070,180);
 		g.drawString("Player 1 : ", 1020, 210);
-		g.drawString("Time remain : " + countDownSeconds, 1020, 300);
-		// g.drawString("Player 1:  "+ tank1.getHp(), 1030,180);
+		g.drawString("TIME REMAIN : " + countDownSeconds, 1020, 700);
 		File file1 = new File("live_" + tank1.getHp() + ".png");
 		try {
 			Image image = ImageIO.read(file1);
@@ -273,13 +270,14 @@ public class Gameplay extends JPanel implements ActionListener
 		}
 
 		//Xử lý nếu mạng của người 1 hoặc người 2 chỉ còn 0 (chết)
-		if(tank1.getHp() == 0 || tank2.getHp() == 0)
+		if(tank1.getHp() == 0 || tank2.getHp() == 0 || countDownSeconds <= 0)
 		{
+			
 			g.fillRect(0,0,1000,1000);
 			g.setColor(Color.white);
 			g.setFont(new Font("san-serif",Font.BOLD, 60));
 			g.drawString("Game Over", 300,300);
-			g.drawString("Player 2 Won", 280,380);
+			g.drawString("Player " + (tank1.getScore() > tank2.getScore() ? "1" : "2") + " Won", 280,380);
 			play = false;
 			g.setColor(Color.white);
 			g.setFont(new Font("sans-serif",Font.BOLD, 30));
@@ -303,7 +301,7 @@ public class Gameplay extends JPanel implements ActionListener
 		public void keyReleased(KeyEvent e) {}
 		
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode()== KeyEvent.VK_SPACE && (tank1.getHp() == 0 || tank2.getHp() == 0))
+			if(e.getKeyCode()== KeyEvent.VK_SPACE && ((tank1.getHp() == 0 || tank2.getHp() == 0) || countDownSeconds == 0))
 			{
 				br = new brick();
 				tank1.setPlayerX(50);
@@ -324,6 +322,8 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setHp(5);
 				tank2.setScore(0);
 				tank2.setHp(5);
+				countDownSeconds = 120;
+				countDonw();
 				play = true;
 				repaint();
 			}
@@ -333,9 +333,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_down(false);
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(false);
-
-				if(tank1.getPlayerY()>5 && impact_up1){
-					tank1.setPlayerY(tank1.getPlayerY()-10);
+				if(checkTankHitBrick(tank1.getPlayerX(),tank1.getPlayerY() - 10) == false){
+					if(tank1.getPlayerY()>5 && impact_up1){
+						tank1.setPlayerY(tank1.getPlayerY()-10);
+					}
 				}
 				impact_up1 = true;
 			}
@@ -345,9 +346,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(false);
 
-				
-				if(tank1.getPlayerY()<700 && impact_down1){
-					tank1.setPlayerY(tank1.getPlayerY()+10);
+				if(checkTankHitBrick(tank1.getPlayerX(),tank1.getPlayerY() + 10) == false){
+					if(tank1.getPlayerY()<700 && impact_down1){
+						tank1.setPlayerY(tank1.getPlayerY()+10);
+					}
 				}
 				impact_down1 = true;
 			}
@@ -357,9 +359,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(true);
 				tank1.setPlayer_right(false);
 
-
-				if(tank1.getPlayerX()>5 && impact_left1){
-					tank1.setPlayerX(tank1.getPlayerX()-10);
+				if(checkTankHitBrick(tank1.getPlayerX() - 10,tank1.getPlayerY()) == false){
+					if(tank1.getPlayerX()>5 && impact_left1){
+						tank1.setPlayerX(tank1.getPlayerX()-10);
+					}
 				}
 				impact_left1 = true;
 			}
@@ -369,8 +372,10 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(true);
 
-				if(tank1.getPlayerX()<950 && impact_right1){
-					tank1.setPlayerX(tank1.getPlayerX()+10);
+				if(checkTankHitBrick(tank1.getPlayerX() + 10,tank1.getPlayerY()) == false){
+					if(tank1.getPlayerX()<950 && impact_right1){
+						tank1.setPlayerX(tank1.getPlayerX()+10);
+					}
 				}
 				impact_right1 = true;
 			}
