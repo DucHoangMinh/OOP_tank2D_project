@@ -19,7 +19,7 @@ public class Main {
         // Gameplay GamePlay = new Gameplay();
 		startMenu start = new startMenu(map);
 		map.setBounds(0, 0, 1250, 787);//kích cỡ
-		map.setTitle("Tank 2D");	// tiêu đề
+		map.setTitle("Tank 2D");	//tiêu đề
 		// map.getContentPane().setBackground(Color.gray);//nền
 		map.setResizable(false);//thu phóng
 		map.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//nút tắt
