@@ -1,6 +1,7 @@
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,7 +41,8 @@ public class startMenu extends JPanel implements ActionListener{
 
         viewGuide.addActionListener(e -> {
             this.setVisible(false);
-            guidePage guidePage = new guidePage(frame);
+            guidePage guidePage;
+            guidePage = new guidePage(frame);
             frame.add(guidePage);
             frame.repaint();
             guidePage.requestFocus();
