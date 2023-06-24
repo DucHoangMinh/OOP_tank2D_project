@@ -352,10 +352,12 @@ public class Gameplay extends JPanel implements ActionListener
 						tank1.setPlayerY(tank1.getPlayerY()-10);
 					}
 				}
-				// if(br.checktreeCollision(tank1.getPlayerX(),tank1.getPlayerY() )){
-				// 	if(tank1.getPlayerY()>5 && impact_up1){
-				// 		tank1.setPlayerY(tank1.getPlayerY()10);
+				// if(br.checktreeCollision(tank1.getPlayerX(),tank1.getPlayerY()-10)== false){
+				// 	// if(tank1.getPlayerY()>5 && impact_up1){
+				// 	// 	tank1.setPlayerY(tank1.getPlayerY()-10);
+					
 				// 	}
+				// 	// return true;
 				// }
 				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){
 					tank1.setScore(tank1.getScore() + 10);
