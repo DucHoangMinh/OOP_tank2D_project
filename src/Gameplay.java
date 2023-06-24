@@ -91,7 +91,17 @@ public class Gameplay extends JPanel implements ActionListener
 				return true;
 			} 
 		}
-		return false;
+		// for(int i=0; i< brickON.length;i++){
+			
+		// 		if(new Rectangle(x, y, 50, 50).intersects(new
+		// 	Rectangle(br.treebricksXPos[i], br.treebricksYPos[i], 50, 50))){
+		// 		return true;
+		// 	}
+		// 	}
+			
+		
+		
+		 return false;
 	}
 	public void paint(Graphics g)
 	{    		
@@ -106,6 +116,8 @@ public class Gameplay extends JPanel implements ActionListener
 		//Vẽ gạch cứng
 		br.drawSolids(this, g);
 		br.drawTree(this, g);
+		//ve item
+		br.drawitem(this,g);
 		
 		//Vẽ gạch mềm
 		br.draw(this, g);
@@ -163,11 +175,13 @@ public class Gameplay extends JPanel implements ActionListener
 						|| br.checkSolidCollision(tank1Bullet.getX(), tank1Bullet.getY()))
 				{
 					//nếu đạn dính tường,hủy bỏ viên đạn
+					
 					tank1Bullet = null;
 					tank1.setPlayer_shoot(false);
 					bulletShootDir1 = "";			
 				}
-	
+	            
+				
 				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
 				if(tank1Bullet.getY() < 1 
 						|| tank1Bullet.getY() > 750
@@ -251,19 +265,19 @@ public class Gameplay extends JPanel implements ActionListener
 		g.drawString("Lives", 1070,180);
 		g.drawString("Player 1 : ", 1020, 210);
 		g.drawString("TIME REMAIN : " + countDownSeconds, 1020, 700);
-		File file1 = new File("live_" + tank1.getHp() + ".png");
+		File file1 = new File("live_" + (tank1.getHp()  > 5 ? 5 : tank1.getHp())+ ".png");
 		try {
 			Image image = ImageIO.read(file1);
-			g.drawImage(image, 1090, 195, tank1.getHp() * 20, 20, getFocusCycleRootAncestor());
+			g.drawImage(image, 1090, 195, (tank1.getHp() > 5 ? 5 : tank1.getHp()) * 20, 20, getFocusCycleRootAncestor());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		g.drawString("Player 2:  ", 1020,240);
-		File file2 = new File("live_" + tank2.getHp() + ".png");
+		File file2 = new File("live_" + (tank2.getHp() > 5 ? 5 : tank2.getHp()) + ".png");
 		try {
 			Image image = ImageIO.read(file2);
-			g.drawImage(image, 1090, 225, tank2.getHp() * 20, 20, getFocusCycleRootAncestor());
+			g.drawImage(image, 1090, 225, (tank2.getHp() > 5 ? 5 : tank2.getHp() )* 20, 20, getFocusCycleRootAncestor());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -338,6 +352,16 @@ public class Gameplay extends JPanel implements ActionListener
 						tank1.setPlayerY(tank1.getPlayerY()-10);
 					}
 				}
+				// if(br.checktreeCollision(tank1.getPlayerX(),tank1.getPlayerY() )){
+				// 	if(tank1.getPlayerY()>5 && impact_up1){
+				// 		tank1.setPlayerY(tank1.getPlayerY()10);
+				// 	}
+				// }
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){
+					tank1.setScore(tank1.getScore() + 10);
+					tank1.setHp(tank1.getHp() + 1);
+
+				}
 				impact_up1 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_S){
@@ -350,6 +374,11 @@ public class Gameplay extends JPanel implements ActionListener
 					if(tank1.getPlayerY()<700 && impact_down1){
 						tank1.setPlayerY(tank1.getPlayerY()+10);
 					}
+				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){
+					tank1.setScore(tank1.getScore() + 10);
+					tank1.setHp(tank1.getHp() + 1);
+
 				}
 				impact_down1 = true;
 			}
@@ -364,6 +393,11 @@ public class Gameplay extends JPanel implements ActionListener
 						tank1.setPlayerX(tank1.getPlayerX()-10);
 					}
 				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){
+					tank1.setScore(tank1.getScore() + 10);
+					tank1.setHp(tank1.getHp() + 1);
+
+				}
 				impact_left1 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_D){
@@ -376,6 +410,11 @@ public class Gameplay extends JPanel implements ActionListener
 					if(tank1.getPlayerX()<950 && impact_right1){
 						tank1.setPlayerX(tank1.getPlayerX()+10);
 					}
+				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){
+					tank1.setScore(tank1.getScore() + 10);
+					tank1.setHp(tank1.getHp() + 1);
+
 				}
 				impact_right1 = true;
 			}
@@ -429,6 +468,11 @@ public class Gameplay extends JPanel implements ActionListener
 						tank2.setPlayerY(tank2.getPlayerY()-10);
 					}
 				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){
+					tank2.setScore(tank2.getScore() + 10);
+					tank2.setHp(tank2.getHp() + 1);
+
+				}
 				impact_up2 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_DOWN){
@@ -441,6 +485,11 @@ public class Gameplay extends JPanel implements ActionListener
 					if(tank2.getPlayerY()<700 && impact_down2){
 						tank2.setPlayerY(tank2.getPlayerY()+10);
 					}
+				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){
+					tank2.setScore(tank2.getScore() + 10);
+					tank2.setHp(tank2.getHp() + 1);
+
 				}
 				impact_down2 = true;
 			}
@@ -455,6 +504,11 @@ public class Gameplay extends JPanel implements ActionListener
 						tank2.setPlayerX(tank2.getPlayerX()-10);
 					}
 				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){
+					tank2.setScore(tank2.getScore() + 10);
+					tank2.setHp(tank2.getHp() + 1);
+
+				}
 				impact_left2 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_RIGHT){
@@ -467,6 +521,11 @@ public class Gameplay extends JPanel implements ActionListener
 					if(tank2.getPlayerX()<950 && impact_right2){
 						tank2.setPlayerX(tank2.getPlayerX()+10);
 					}
+				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){
+					tank2.setScore(tank2.getScore() + 10);
+					tank2.setHp(tank2.getHp() + 1);
+
 				}
 				impact_right2 = true;
 			}
