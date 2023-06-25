@@ -32,7 +32,7 @@ public class Gameplay extends JPanel implements ActionListener
 
 	//khai báo đối tượng tank với các thuộc tính tương ứng
 	private Tank tank1 = new Tank(50, 550, 5, 0, true, false, false, false, false);
-	private Tank tank2 = new Tank(100, 200, 5, 0, false, true, false, false, false);
+	private Tank tank2 = new Tank(550, 0, 5, 0, false, true, false, false, false);
 	
 	private String bulletShootDir1 = "";//hướng của viên đạn
 	private String bulletShootDir2 = "";
@@ -43,7 +43,7 @@ public class Gameplay extends JPanel implements ActionListener
 	private Control_nother controlTank2;
 
 	//Biến lưu trữ cái đếm ngược
-	private int countDownSeconds = 20;
+	private int countDownSeconds = 60;
 	private Timer cdTimer;
 
 	public void countDonw(){
@@ -91,6 +91,16 @@ public class Gameplay extends JPanel implements ActionListener
 				return true;
 			} 
 		}
+		// for(int i=0; i< brickON.length;i++){	
+				
+		// 		if(new Rectangle(x, y, 50, 50).intersects(new	
+		// 	Rectangle(br.treebricksXPos[i], br.treebricksYPos[i], 50, 50))){	
+		// 		return true;	
+		// 	}	
+		// 	}	
+				
+			
+		
 		return false;
 	}
 	public void paint(Graphics g)
@@ -106,7 +116,8 @@ public class Gameplay extends JPanel implements ActionListener
 		//Vẽ gạch cứng
 		br.drawSolids(this, g);
 		br.drawTree(this, g);
-		
+		//ve item	
+		br.drawitem(this,g);
 		//Vẽ gạch mềm
 		br.draw(this, g);
 
@@ -251,19 +262,19 @@ public class Gameplay extends JPanel implements ActionListener
 		g.drawString("Lives", 1070,180);
 		g.drawString("Player 1 : ", 1020, 210);
 		g.drawString("TIME REMAIN : " + countDownSeconds, 1020, 700);
-		File file1 = new File("live_" + tank1.getHp() + ".png");
-		try {
-			Image image = ImageIO.read(file1);
-			g.drawImage(image, 1090, 195, tank1.getHp() * 20, 20, getFocusCycleRootAncestor());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		g.drawString("Player 2:  ", 1020,240);
-		File file2 = new File("live_" + tank2.getHp() + ".png");
-		try {
-			Image image = ImageIO.read(file2);
-			g.drawImage(image, 1090, 225, tank2.getHp() * 20, 20, getFocusCycleRootAncestor());
+		File file1 = new File("live_" + (tank1.getHp()  > 5 ? 5 : tank1.getHp())+ ".png");	
+		try {	
+			Image image = ImageIO.read(file1);	
+			g.drawImage(image, 1090, 195, (tank1.getHp() > 5 ? 5 : tank1.getHp()) * 20, 20, getFocusCycleRootAncestor());	
+		} catch (IOException e) {	
+			// TODO Auto-generated catch block	
+			e.printStackTrace();	
+		}	
+		g.drawString("Player 2:  ", 1020,240);	
+		File file2 = new File("live_" + (tank2.getHp() > 5 ? 5 : tank2.getHp()) + ".png");	
+		try {	
+			Image image = ImageIO.read(file2);	
+			g.drawImage(image, 1090, 225, (tank2.getHp() > 5 ? 5 : tank2.getHp() )* 20, 20, getFocusCycleRootAncestor());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -311,8 +322,8 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_right(false);
 				tank1.setPlayer_up(true);	
 				
-				tank2.setPlayerX(900);
-				tank2.setPlayerY(150);	
+				tank2.setPlayerX(550);
+				tank2.setPlayerY(0);	
 				tank2.setPlayer_up(false);
 				tank2.setPlayer_right(false);
 				tank2.setPlayer_left(false);
@@ -338,6 +349,16 @@ public class Gameplay extends JPanel implements ActionListener
 						tank1.setPlayerY(tank1.getPlayerY()-10);
 					}
 				}
+				// if(br.checktreeCollision(tank1.getPlayerX(),tank1.getPlayerY()-10)== false){	
+				// 	// if(tank1.getPlayerY()>5 && impact_up1){	
+				// 	// 	tank1.setPlayerY(tank1.getPlayerY()-10);	
+						
+				// 	}	
+				// 	// return true;	
+				// }	
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
+					tank1.setHp(tank1.getHp() >= 5 ? 5 : tank1.getHp() + 1);	
+				}
 				impact_up1 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_S){
@@ -350,6 +371,9 @@ public class Gameplay extends JPanel implements ActionListener
 					if(tank1.getPlayerY()<700 && impact_down1){
 						tank1.setPlayerY(tank1.getPlayerY()+10);
 					}
+				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
+					tank1.setHp(tank1.getHp() >= 5 ? 5 : tank1.getHp() + 1);	
 				}
 				impact_down1 = true;
 			}
@@ -364,6 +388,9 @@ public class Gameplay extends JPanel implements ActionListener
 						tank1.setPlayerX(tank1.getPlayerX()-10);
 					}
 				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
+					tank1.setHp(tank1.getHp() >= 5 ? 5: tank1.getHp() + 1);	
+				}
 				impact_left1 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_D){
@@ -376,6 +403,9 @@ public class Gameplay extends JPanel implements ActionListener
 					if(tank1.getPlayerX()<950 && impact_right1){
 						tank1.setPlayerX(tank1.getPlayerX()+10);
 					}
+				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
+					tank1.setHp(tank1.getHp() >= 5 ? 5 : tank1.getHp() + 1);	
 				}
 				impact_right1 = true;
 			}
@@ -429,6 +459,9 @@ public class Gameplay extends JPanel implements ActionListener
 						tank2.setPlayerY(tank2.getPlayerY()-10);
 					}
 				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){	
+					tank2.setHp(tank2.getHp() >= 5 ? 5 : tank2.getHp() + 1);	
+				}
 				impact_up2 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_DOWN){
@@ -441,6 +474,9 @@ public class Gameplay extends JPanel implements ActionListener
 					if(tank2.getPlayerY()<700 && impact_down2){
 						tank2.setPlayerY(tank2.getPlayerY()+10);
 					}
+				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){	
+					tank2.setHp(tank2.getHp() >= 5 ? 5 : tank2.getHp() + 1);	
 				}
 				impact_down2 = true;
 			}
@@ -455,6 +491,9 @@ public class Gameplay extends JPanel implements ActionListener
 						tank2.setPlayerX(tank2.getPlayerX()-10);
 					}
 				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){	
+					tank2.setHp(tank2.getHp() >= 5 ? 5 : tank2.getHp() + 1);	
+				}
 				impact_left2 = true;
 			}
 			if(e.getKeyCode()==KeyEvent.VK_RIGHT){
@@ -467,6 +506,9 @@ public class Gameplay extends JPanel implements ActionListener
 					if(tank2.getPlayerX()<950 && impact_right2){
 						tank2.setPlayerX(tank2.getPlayerX()+10);
 					}
+				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){	
+					tank2.setHp(tank2.getHp() >= 5 ? 5 : tank2.getHp() + 1);	
 				}
 				impact_right2 = true;
 			}
