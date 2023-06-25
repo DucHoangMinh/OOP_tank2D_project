@@ -34,7 +34,7 @@ public class guidePage extends JPanel{
         JButton switchButton = new JButton("Next");
         JLabel guideLabel = new JLabel();
         
-        ImageIcon tankGuide = new ImageIcon("tank guide.png");
+        ImageIcon tankGuide = new ImageIcon("tank fire.png");
         Image image = tankGuide.getImage();
         Image newimage = image.getScaledInstance(1236, 780, java.awt.Image.SCALE_SMOOTH);
         guideLabel.setIcon(new ImageIcon(newimage));
@@ -43,9 +43,10 @@ public class guidePage extends JPanel{
         switchButton.setBounds(900, 657, 140, 60);
         backButton.setBounds(1070, 657, 140, 60);
         
+        backButton.setBackground(Color.WHITE);
         backButton.setFont(new Font("Calibri", Font.BOLD, 20));
-        //backButton.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-        backButton.setBorderPainted(false);
+        backButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        backButton.setBorderPainted(true);
 
         backButton.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e){
@@ -54,8 +55,8 @@ public class guidePage extends JPanel{
             }
 
             public void mouseExited(MouseEvent e){
-                backButton.setBorder(BorderFactory.createLineBorder(Color.red, 2));
-                backButton.setBorderPainted(false);
+                backButton.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+                backButton.setBorderPainted(true);
             }
         });
 
