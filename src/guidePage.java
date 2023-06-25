@@ -43,12 +43,13 @@ public class guidePage extends JPanel{
         switchButton.setBounds(900, 657, 140, 60);
         backButton.setBounds(1070, 657, 140, 60);
         
+        backButton.setFont(new Font("Calibri", Font.BOLD, 20));
         //backButton.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
         backButton.setBorderPainted(false);
 
         backButton.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e){
-                backButton.setBorder(BorderFactory.createLineBorder(Color.blue, 2));
+                backButton.setBorder(BorderFactory.createLineBorder(Color.blue, 2)); //màu viền của button
                 backButton.setBorderPainted(true);
             }
 
