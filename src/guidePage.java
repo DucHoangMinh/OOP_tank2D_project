@@ -43,9 +43,9 @@ public class guidePage extends JPanel{
         switchButton.setBounds(900, 657, 140, 60);
         backButton.setBounds(1070, 657, 140, 60);
         
-        backButton.setBackground(Color.WHITE);
+        backButton.setBackground(new Color(207, 177, 139));
         backButton.setFont(new Font("Calibri", Font.BOLD, 20));
-        backButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        backButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
         backButton.setBorderPainted(true);
 
         backButton.addMouseListener(new MouseAdapter() {
