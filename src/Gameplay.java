@@ -7,7 +7,9 @@ import java.security.Key;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
+import javax.sound.sampled.AudioInputStream;	
+import javax.sound.sampled.AudioSystem;	
+import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.*;
 import javax.swing.*;
@@ -76,7 +78,20 @@ public class Gameplay extends JPanel implements ActionListener
 		timer = new Timer(delay, this);
 		timer.start();
 		countDonw();
-	}
+		Clip clip1 = null;	
+        try {	
+            File soundFile1 = new File("sound/Gameplay5.wav");	
+            AudioInputStream audioIn1 = AudioSystem.getAudioInputStream(soundFile1);	
+            clip1 = AudioSystem.getClip();	
+            clip1.open(audioIn1);	
+            clip1.start();	
+            clip1.loop(Clip.LOOP_CONTINUOUSLY);	
+        } catch (Exception e) {	
+            e.printStackTrace();	
+        }	
+		final Clip finalclip1 = clip1;	
+
+}
 	
 	public boolean checkTankHitBrick(int x,int y){
 		for(int i = 0; i < br.bricksXPos.length; i++){
@@ -149,6 +164,16 @@ public class Gameplay extends JPanel implements ActionListener
 					{			
 						bulletShootDir1 = "left";
 					}
+					Clip fire = null;	
+					try{	
+						File soundFile2 = new File("sound/Fire.wav");	
+						AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(soundFile2);	
+						fire = AudioSystem.getClip();	
+						fire.open(audioIn2);	
+						fire.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}
 				}
 				//Hướng của đạn đã được xác định
 				//dùng hàm move để tịnh tiến 
@@ -176,7 +201,17 @@ public class Gameplay extends JPanel implements ActionListener
 					//nếu đạn dính tường,hủy bỏ viên đạn
 					tank1Bullet = null;
 					tank1.setPlayer_shoot(false);
-					bulletShootDir1 = "";			
+					bulletShootDir1 = "";	
+					Clip explose = null;	
+					try{	
+						File soundFile3 = new File("sound/Explosion.wav");	
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);	
+						explose = AudioSystem.getClip();	
+						explose.open(audioIn3);	
+						explose.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}		
 				}
 	
 				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
@@ -188,6 +223,16 @@ public class Gameplay extends JPanel implements ActionListener
 					tank1Bullet = null;
 					tank1.setPlayer_shoot(false);
 					bulletShootDir1 = "";
+					Clip explose = null;	
+					try{	
+						File soundFile3 = new File("sound/Explosion.wav");	
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);	
+						explose = AudioSystem.getClip();	
+						explose.open(audioIn3);	
+						explose.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}	
 				}
 			}
 
@@ -213,6 +258,16 @@ public class Gameplay extends JPanel implements ActionListener
 					{			
 						bulletShootDir2 = "left";
 					}
+					Clip fire = null;	
+					try{	
+						File soundFile2 = new File("sound/Fire.wav");	
+						AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(soundFile2);	
+						fire = AudioSystem.getClip();	
+						fire.open(audioIn2);	
+						fire.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}
 				}
 				else
 				{
@@ -227,6 +282,16 @@ public class Gameplay extends JPanel implements ActionListener
 					tank2Bullet = null;
 					tank2.setPlayer_shoot(false);
 					bulletShootDir2 = "";
+					Clip explose = null;	
+					try{	
+						File soundFile3 = new File("sound/Explosion.wav");	
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);	
+						explose = AudioSystem.getClip();	
+						explose.open(audioIn3);	
+						explose.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}
 				}
 				
 				//Dùng hàm checkCollision để kiểm tra đạn dính tường hay không
@@ -236,7 +301,17 @@ public class Gameplay extends JPanel implements ActionListener
 					//nếu đạn dính tường,hủy bỏ viên đạn
 					tank2Bullet = null;
 					tank2.setPlayer_shoot(false);
-					bulletShootDir2 = "";				
+					bulletShootDir2 = "";	
+					Clip explose = null;	
+					try{	
+						File soundFile3 = new File("sound/Explosion.wav");	
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);	
+						explose = AudioSystem.getClip();	
+						explose.open(audioIn3);	
+						explose.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}			
 				}
 	
 				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn

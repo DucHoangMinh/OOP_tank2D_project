@@ -4,7 +4,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.File;	
+import javax.sound.sampled.*;	
+import javax.sound.sampled.AudioInputStream;	
+import javax.sound.sampled.AudioSystem;	
+import javax.sound.sampled.Clip;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,6 +20,7 @@ import javax.swing.plaf.nimbus.State;
 import java.util.Objects;
 
 public class startMenu extends JPanel implements ActionListener{
+    private boolean toGame = false;
     private JFrame frame;
     
     ImageIcon startImage = new ImageIcon("pngegg.png");
@@ -68,6 +73,38 @@ public class startMenu extends JPanel implements ActionListener{
         this.add(imageLabel);
         this.add(imageLabel2);
 
+        	
+        Clip clip = null;	
+        try {	
+            File soundFile = new File("sound/startMenu.wav");	
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);	
+            clip = AudioSystem.getClip();	
+            clip.open(audioIn);	
+            clip.start();	
+            clip.loop(Clip.LOOP_CONTINUOUSLY);	
+        } catch (Exception e) {	
+            e.printStackTrace();	
+        }	
+        final Clip finalClip = clip; 	
+        startButton.addActionListener(e -> {	
+            finalClip.stop(); 	
+            finalClip.close();	
+            this.setVisible(false);	
+            Gameplay GamePlay = new Gameplay();	
+            frame.add(GamePlay);	
+            frame.repaint();	
+            GamePlay.requestFocus();	
+        });	
+        viewGuide.addActionListener(e -> {	
+            finalClip.stop(); 	
+            finalClip.close();	
+            this.setVisible(false);	
+            guidePage guidePage = new guidePage(frame);	
+            frame.add(guidePage);	
+            frame.repaint();	
+            guidePage.requestFocus();	
+        });
+        
         startButton.addActionListener(e -> {
             this.setVisible(false);
             Gameplay GamePlay = new Gameplay();
