@@ -34,8 +34,8 @@ public class guidePage extends JPanel{
         JButton switchButton = new JButton("Next");
         JLabel guideLabel = new JLabel();
         
-        ImageIcon help = new ImageIcon("tank hd 1.png");
-        Image image = help.getImage();
+        ImageIcon tankGuide = new ImageIcon("tank guide.png");
+        Image image = tankGuide.getImage();
         Image newimage = image.getScaledInstance(1236, 780, java.awt.Image.SCALE_SMOOTH);
         guideLabel.setIcon(new ImageIcon(newimage));
         
