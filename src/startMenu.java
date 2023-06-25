@@ -1,7 +1,12 @@
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.sound.sampled.*;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,7 +35,22 @@ public class startMenu extends JPanel implements ActionListener{
         this.add(viewGuide);
         this.add(startLabel);
 
+        Clip clip = null;
+        try {
+            File soundFile = new File("sound/startMenu.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final Clip finalClip = clip; 
         startButton.addActionListener(e -> {
+            finalClip.stop(); 
+            finalClip.close();
             this.setVisible(false);
             Gameplay GamePlay = new Gameplay();
             frame.add(GamePlay);
@@ -39,6 +59,8 @@ public class startMenu extends JPanel implements ActionListener{
         });
 
         viewGuide.addActionListener(e -> {
+            finalClip.stop(); 
+            finalClip.close();
             this.setVisible(false);
             guidePage guidePage = new guidePage(frame);
             frame.add(guidePage);

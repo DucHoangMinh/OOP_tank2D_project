@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.security.Key;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 import java.awt.*;
@@ -39,8 +42,7 @@ public class Gameplay extends JPanel implements ActionListener
 	private Bullet tank1Bullet = null;
 	private Bullet tank2Bullet = null;
 	private boolean play = true;
-	private Control controlTank1;
-	private Control_nother controlTank2;
+	private Control control;
 
 	//Biến lưu trữ cái đếm ngược
 	private int countDownSeconds = 20;
@@ -64,18 +66,29 @@ public class Gameplay extends JPanel implements ActionListener
 		//Nhét tường vào frame (đoạn này vẫn chưa hiện lên tường đâu,phải paint nó nữa)
 		br = new brick();
 
-		controlTank1 = new Control();
-		controlTank2 = new Control_nother();
+		control = new Control();
 
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(true);
 
-		addKeyListener(controlTank1);
-		addKeyListener(controlTank2);
+		addKeyListener(control);
 
 		timer = new Timer(delay, this);
 		timer.start();
 		countDonw();
+
+		Clip clip1 = null;
+        try {
+            File soundFile1 = new File("sound/Gameplay5.wav");
+            AudioInputStream audioIn1 = AudioSystem.getAudioInputStream(soundFile1);
+            clip1 = AudioSystem.getClip();
+            clip1.open(audioIn1);
+            clip1.start();
+            clip1.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		final Clip finalclip1 = clip1;
 	}
 	
 	public boolean checkTankHitBrick(int x,int y){
@@ -138,6 +151,16 @@ public class Gameplay extends JPanel implements ActionListener
 					{			
 						bulletShootDir1 = "left";
 					}
+					Clip fire = null;
+					try{
+						File soundFile2 = new File("sound/Fire.wav");
+						AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(soundFile2);
+						fire = AudioSystem.getClip();
+						fire.open(audioIn2);
+						fire.start();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				//Hướng của đạn đã được xác định
 				//dùng hàm move để tịnh tiến 
@@ -156,6 +179,16 @@ public class Gameplay extends JPanel implements ActionListener
 					tank1Bullet = null;
 					tank1.setPlayer_shoot(false);
 					bulletShootDir1 = "";
+					Clip explose = null;
+					try{
+						File soundFile3 = new File("sound/Explosion.wav");
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);
+						explose = AudioSystem.getClip();
+						explose.open(audioIn3);
+						explose.start();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				
 				//Dùng hàm checkCollision vs checkSolidCollision để kiểm tra đạn dính tường hay không
@@ -165,7 +198,17 @@ public class Gameplay extends JPanel implements ActionListener
 					//nếu đạn dính tường,hủy bỏ viên đạn
 					tank1Bullet = null;
 					tank1.setPlayer_shoot(false);
-					bulletShootDir1 = "";			
+					bulletShootDir1 = "";		
+					Clip explose = null;
+					try{
+						File soundFile3 = new File("sound/Explosion.wav");
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);
+						explose = AudioSystem.getClip();
+						explose.open(audioIn3);
+						explose.start();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}	
 				}
 	
 				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
@@ -202,6 +245,16 @@ public class Gameplay extends JPanel implements ActionListener
 					{			
 						bulletShootDir2 = "left";
 					}
+					Clip fire = null;
+					try{
+						File soundFile2 = new File("sound/Fire.wav");
+						AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(soundFile2);
+						fire = AudioSystem.getClip();
+						fire.open(audioIn2);
+						fire.start();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				else
 				{
@@ -216,6 +269,16 @@ public class Gameplay extends JPanel implements ActionListener
 					tank2Bullet = null;
 					tank2.setPlayer_shoot(false);
 					bulletShootDir2 = "";
+					Clip explose = null;
+					try{
+						File soundFile3 = new File("sound/Explosion.wav");
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);
+						explose = AudioSystem.getClip();
+						explose.open(audioIn3);
+						explose.start();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				
 				//Dùng hàm checkCollision để kiểm tra đạn dính tường hay không
@@ -225,7 +288,17 @@ public class Gameplay extends JPanel implements ActionListener
 					//nếu đạn dính tường,hủy bỏ viên đạn
 					tank2Bullet = null;
 					tank2.setPlayer_shoot(false);
-					bulletShootDir2 = "";				
+					bulletShootDir2 = "";		
+					Clip explose = null;
+					try{
+						File soundFile3 = new File("sound/Explosion.wav");
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);
+						explose = AudioSystem.getClip();
+						explose.open(audioIn3);
+						explose.start();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}		
 				}
 	
 				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
@@ -272,7 +345,6 @@ public class Gameplay extends JPanel implements ActionListener
 		//Xử lý nếu mạng của người 1 hoặc người 2 chỉ còn 0 (chết)
 		if(tank1.getHp() == 0 || tank2.getHp() == 0 || countDownSeconds <= 0)
 		{
-			
 			g.fillRect(0,0,1000,1000);
 			g.setColor(Color.white);
 			g.setFont(new Font("san-serif",Font.BOLD, 60));
@@ -340,6 +412,7 @@ public class Gameplay extends JPanel implements ActionListener
 				}
 				impact_up1 = true;
 			}
+
 			if(e.getKeyCode()==KeyEvent.VK_S){
 				tank1.setPlayer_up(false);
 				tank1.setPlayer_down(true);
@@ -353,6 +426,7 @@ public class Gameplay extends JPanel implements ActionListener
 				}
 				impact_down1 = true;
 			}
+
 			if(e.getKeyCode()==KeyEvent.VK_A){
 				tank1.setPlayer_up(false);
 				tank1.setPlayer_down(false);
@@ -366,6 +440,7 @@ public class Gameplay extends JPanel implements ActionListener
 				}
 				impact_left1 = true;
 			}
+
 			if(e.getKeyCode()==KeyEvent.VK_D){
 				tank1.setPlayer_up(false);
 				tank1.setPlayer_down(false);
@@ -405,11 +480,93 @@ public class Gameplay extends JPanel implements ActionListener
 				}
 			}
 
+
+			if(e.getKeyCode()==KeyEvent.VK_UP){
+				tank2.setPlayer_up(true);
+				tank2.setPlayer_down(false);
+				tank2.setPlayer_left(false);
+				tank2.setPlayer_right(false);
+
+				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() - 10) == false){
+					if(tank2.getPlayerY()>5 && impact_up2){
+						tank2.setPlayerY(tank2.getPlayerY()-10);
+					}
+				}
+				impact_up2 = true;
+			}
+
+			if(e.getKeyCode()==KeyEvent.VK_DOWN){
+				tank2.setPlayer_up(false);
+				tank2.setPlayer_down(true);
+				tank2.setPlayer_left(false);
+				tank2.setPlayer_right(false);
+
+				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() + 10) == false){
+					if(tank2.getPlayerY()<700 && impact_down2){
+						tank2.setPlayerY(tank2.getPlayerY()+10);
+					}
+				}
+				impact_down2 = true;
+			}
+
+			if(e.getKeyCode()==KeyEvent.VK_LEFT){
+				tank2.setPlayer_up(false);
+				tank2.setPlayer_down(false);
+				tank2.setPlayer_left(true);
+				tank2.setPlayer_right(false);
+
+				if(checkTankHitBrick(tank2.getPlayerX() - 10,tank2.getPlayerY()) == false){
+					if(tank2.getPlayerX()>5 && impact_left2){
+						tank2.setPlayerX(tank2.getPlayerX()-10);
+					}
+				}
+				impact_left2 = true;
+			}
+			
+			if(e.getKeyCode()==KeyEvent.VK_RIGHT){
+				tank2.setPlayer_up(false);
+				tank2.setPlayer_down(false);
+				tank2.setPlayer_left(false);
+				tank2.setPlayer_right(true);
+								
+				if(checkTankHitBrick(tank2.getPlayerX() + 10,tank2.getPlayerY()) == false){
+					if(tank2.getPlayerX()<950 && impact_right2){
+						tank2.setPlayerX(tank2.getPlayerX()+10);
+					}
+				}
+				impact_right2 = true;
+			}
+
+			if(e.getKeyCode()== KeyEvent.VK_M)
+			{
+				if(!tank2.isPlayer_shoot())
+				{
+					if(tank2.isPlayer_up())
+					{					
+						tank2Bullet = new Bullet(tank2.getPlayerX() + 20, tank2.getPlayerY());
+					}
+					else if(tank2.isPlayer_down())
+					{					
+						tank2Bullet = new Bullet(tank2.getPlayerX() + 20, tank2.getPlayerY() + 40);
+					}
+					else if(tank2.isPlayer_right())
+					{				
+						tank2Bullet = new Bullet(tank2.getPlayerX() + 40, tank2.getPlayerY() + 20);
+					}
+					else if(tank2.isPlayer_left())
+					{			
+						tank2Bullet = new Bullet(tank2.getPlayerX(), tank2.getPlayerY() + 20);
+					}
+					
+					tank2.setPlayer_shoot(true);
+				}
+			}
+
 		}
 
 	}
 
-	private class Control_nother implements KeyListener{
+	/*private class Control_nother implements KeyListener{
 
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -496,7 +653,7 @@ public class Gameplay extends JPanel implements ActionListener
 				}
 			}
 		}
-	}
+	}*/
 }
 	
 	
