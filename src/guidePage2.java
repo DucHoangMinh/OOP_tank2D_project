@@ -18,14 +18,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-public class guidePage extends JPanel{
+public class guidePage2 extends JPanel{
     private JFrame frame;
     
-    public guidePage(JFrame frame){
+    public guidePage2(JFrame frame){
         this.frame = frame;
         
         JButton backButton = new JButton("Trang chủ");
-        JButton switchButton = new JButton("Chuyển trang 1/2");
+        JButton switchButton = new JButton("Chuyển trang 2/2");
         JLabel guideLabel = new JLabel();
         
         //Setup ảnh
@@ -90,8 +90,8 @@ public class guidePage extends JPanel{
 
         switchButton.addActionListener(e -> {
             this.setVisible(false);
-            guidePage2 guidePage2 = new guidePage2(frame);
-            frame.add(guidePage2);
+            guidePage guidePage = new guidePage(frame);
+            frame.add(guidePage);
             frame.repaint();
             frame.requestFocus();
         });
