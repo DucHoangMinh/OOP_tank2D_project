@@ -30,7 +30,7 @@ public class guidePage extends JPanel{
     public guidePage(JFrame frame){
         this.frame = frame;
         
-        JButton backButton = new JButton("Main Menu");
+        JButton backButton = new JButton("Trang chủ");
         JButton switchButton = new JButton("Next");
         JLabel guideLabel = new JLabel();
         
@@ -49,7 +49,7 @@ public class guidePage extends JPanel{
 
         backButton.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e){
-                backButton.setBorder(BorderFactory.createLineBorder(Color.blue, 2)); //màu viền của button
+                backButton.setBorder(BorderFactory.createLineBorder(Color.blue, 5)); //màu viền của button
                 backButton.setBorderPainted(true);
             }
 
