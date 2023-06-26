@@ -7,7 +7,9 @@ import java.security.Key;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.Image;
+import javax.sound.sampled.AudioInputStream;	
+import javax.sound.sampled.AudioSystem;	
+import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.*;
 import javax.swing.*;
@@ -20,7 +22,6 @@ public class Gameplay extends JPanel implements ActionListener
 	private Timer timer;
 	private int delay=5;
 	
-	//Khai báo trạng thái va chạm với tường của tank
 	private boolean impact_up1 = true;
 	private boolean impact_down1 = true;
 	private boolean impact_right1 = true;
@@ -30,25 +31,36 @@ public class Gameplay extends JPanel implements ActionListener
 	private boolean impact_down2 = true;
 	private boolean impact_right2 = true;
 	private boolean impact_left2 = true;
-	//************************************* */
-
 
 	//khai báo đối tượng tank với các thuộc tính tương ứng
 	private Tank tank1 = new Tank(50, 550, 5, 0, true, false, false, false, false);
-	private Tank tank2 = new Tank(100, 200, 5, 0, false, true, false, false, false);
-
-	
+	private Tank tank2 = new Tank(550, 0, 5, 0, false, true, false, false, false);
 	
 	private String bulletShootDir1 = "";//hướng của viên đạn
 	private String bulletShootDir2 = "";
 	private Bullet tank1Bullet = null;
 	private Bullet tank2Bullet = null;
 	private boolean play = true;
-	
 	private Control controlTank1;
 	private Control_nother controlTank2;
 
-	
+	//Biến lưu trữ cái đếm ngược
+	private int countDownSeconds = 60;
+	private Timer cdTimer;
+
+	public void countDonw(){
+		 cdTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countDownSeconds--;
+                if (countDownSeconds <= 0) {
+                    cdTimer.stop();
+                }
+            }
+        });
+        cdTimer.start();
+	}
+
 	public Gameplay()
 	{	
 		//Nhét tường vào frame (đoạn này vẫn chưa hiện lên tường đâu,phải paint nó nữa)
@@ -65,9 +77,47 @@ public class Gameplay extends JPanel implements ActionListener
 
 		timer = new Timer(delay, this);
 		timer.start();
-	}
-	
+		countDonw();
+		Clip clip1 = null;	
+        try {	
+            File soundFile1 = new File("sound/Gameplay5.wav");	
+            AudioInputStream audioIn1 = AudioSystem.getAudioInputStream(soundFile1);	
+            clip1 = AudioSystem.getClip();	
+            clip1.open(audioIn1);	
+            clip1.start();	
+            clip1.loop(Clip.LOOP_CONTINUOUSLY);	
+        } catch (Exception e) {	
+            e.printStackTrace();	
+        }	
+		final Clip finalclip1 = clip1;	
 
+}
+	
+	public boolean checkTankHitBrick(int x,int y){
+		for(int i = 0; i < br.bricksXPos.length; i++){
+			if(new Rectangle(x, y, 50, 50).intersects(new
+			Rectangle(br.bricksXPos[i], br.bricksYPos[i], 50, 50))){
+				return true;
+			} 
+		}
+		for(int i = 0; i < br.solidBricksXPos.length; i++){
+			if(new Rectangle(x, y, 50, 50).intersects(new
+			Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))){
+				return true;
+			} 
+		}
+		// for(int i=0; i< brickON.length;i++){	
+				
+		// 		if(new Rectangle(x, y, 50, 50).intersects(new	
+		// 	Rectangle(br.treebricksXPos[i], br.treebricksYPos[i], 50, 50))){	
+		// 		return true;	
+		// 	}	
+		// 	}	
+				
+			
+		
+		return false;
+	}
 	public void paint(Graphics g)
 	{    		
 		//Vẽ phần chơi game
@@ -76,12 +126,13 @@ public class Gameplay extends JPanel implements ActionListener
 		
 		//Vẽ nền phần điểm số tay phải
 		g.setColor(Color.WHITE);
-		g.fillRect(1000, 0, 340, 1000);
+		g.fillRect(1000, 0, 340, 800);
 
 		//Vẽ gạch cứng
 		br.drawSolids(this, g);
 		br.drawTree(this, g);
-		
+		//ve item	
+		br.drawitem(this,g);
 		//Vẽ gạch mềm
 		br.draw(this, g);
 
@@ -91,7 +142,6 @@ public class Gameplay extends JPanel implements ActionListener
 
 		tank2.paintTank2(g);
 		tank2.getPlayer_image().paintIcon(this, g, tank2.getPlayerX(), tank2.getPlayerY());
-		
 		if(play){
 			if(tank1Bullet != null && tank1.isPlayer_shoot())//Xử lý đạn tank1
 			{
@@ -113,6 +163,16 @@ public class Gameplay extends JPanel implements ActionListener
 					else if(tank1.isPlayer_left())
 					{			
 						bulletShootDir1 = "left";
+					}
+					Clip fire = null;	
+					try{	
+						File soundFile2 = new File("sound/Fire.wav");	
+						AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(soundFile2);	
+						fire = AudioSystem.getClip();	
+						fire.open(audioIn2);	
+						fire.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
 					}
 				}
 				//Hướng của đạn đã được xác định
@@ -141,7 +201,17 @@ public class Gameplay extends JPanel implements ActionListener
 					//nếu đạn dính tường,hủy bỏ viên đạn
 					tank1Bullet = null;
 					tank1.setPlayer_shoot(false);
-					bulletShootDir1 = "";			
+					bulletShootDir1 = "";	
+					Clip explose = null;	
+					try{	
+						File soundFile3 = new File("sound/Explosion.wav");	
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);	
+						explose = AudioSystem.getClip();	
+						explose.open(audioIn3);	
+						explose.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}		
 				}
 	
 				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
@@ -153,6 +223,16 @@ public class Gameplay extends JPanel implements ActionListener
 					tank1Bullet = null;
 					tank1.setPlayer_shoot(false);
 					bulletShootDir1 = "";
+					Clip explose = null;	
+					try{	
+						File soundFile3 = new File("sound/Explosion.wav");	
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);	
+						explose = AudioSystem.getClip();	
+						explose.open(audioIn3);	
+						explose.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}	
 				}
 			}
 
@@ -178,6 +258,16 @@ public class Gameplay extends JPanel implements ActionListener
 					{			
 						bulletShootDir2 = "left";
 					}
+					Clip fire = null;	
+					try{	
+						File soundFile2 = new File("sound/Fire.wav");	
+						AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(soundFile2);	
+						fire = AudioSystem.getClip();	
+						fire.open(audioIn2);	
+						fire.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}
 				}
 				else
 				{
@@ -192,6 +282,16 @@ public class Gameplay extends JPanel implements ActionListener
 					tank2Bullet = null;
 					tank2.setPlayer_shoot(false);
 					bulletShootDir2 = "";
+					Clip explose = null;	
+					try{	
+						File soundFile3 = new File("sound/Explosion.wav");	
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);	
+						explose = AudioSystem.getClip();	
+						explose.open(audioIn3);	
+						explose.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}
 				}
 				
 				//Dùng hàm checkCollision để kiểm tra đạn dính tường hay không
@@ -201,7 +301,17 @@ public class Gameplay extends JPanel implements ActionListener
 					//nếu đạn dính tường,hủy bỏ viên đạn
 					tank2Bullet = null;
 					tank2.setPlayer_shoot(false);
-					bulletShootDir2 = "";				
+					bulletShootDir2 = "";	
+					Clip explose = null;	
+					try{	
+						File soundFile3 = new File("sound/Explosion.wav");	
+						AudioInputStream audioIn3 = AudioSystem.getAudioInputStream(soundFile3);	
+						explose = AudioSystem.getClip();	
+						explose.open(audioIn3);	
+						explose.start();	
+					} catch (Exception e) {	
+						e.printStackTrace();	
+					}			
 				}
 	
 				//Nếu viên đạn đi ra ngoài phạm vi Frame,thì hủy bỏ đường đạn
@@ -215,68 +325,6 @@ public class Gameplay extends JPanel implements ActionListener
 					bulletShootDir2 = "";
 				}
 			}
-				
-			//Hàm check xe đụng tường cứng, true thì cho thực hiện lệnh di chuyển, false thì không cho đi tiếp
-				for(int i = 0; i < br.solidBricksXPos.length; i++){
-					if(new Rectangle(tank1.getPlayerX(), tank1.getPlayerY() + 10, 50, 50)
-						.intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
-					|| new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(),50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
-						if(tank1.getPlayer_up()){
-							impact_up1 = false;
-							impact_down1 = true;
-							impact_left1 = true;
-							impact_right1 = true;
-						}
-						else if(tank1.getPlayer_down()){
-							impact_up1 = true;
-							impact_down1 = false;
-							impact_left1 = true;
-							impact_right1 = true;
-						}
-						else if(tank1.getPlayer_left()){
-							impact_up1 = true;
-							impact_down1 = true;
-							impact_left1 = false;
-							impact_right1 = true;
-						}
-						else if(tank1.getPlayer_right()){
-							impact_up1 = true;
-							impact_down1 = true;
-							impact_left1 = true;
-							impact_right1 = false;
-						}
-					}
-				}
-
-				for(int i = 0; i < br.solidBricksXPos.length; i++){
-					if(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY() + 10, 50, 50).intersects(new Rectangle(br.solidBricksXPos[i], br.solidBricksYPos[i], 50, 50))
-					|| new Rectangle(tank1.getPlayerX(),tank1.getPlayerY(),50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
-						if(tank2.getPlayer_up()){
-							impact_up2 = false;
-							impact_down2 = true;
-							impact_left2 = true;
-							impact_right2 = true;
-						}
-						else if(tank2.getPlayer_down()){
-							impact_up2 = true;
-							impact_down2 = false;
-							impact_left2 = true;
-							impact_right2 = true;
-						}
-						else if(tank2.getPlayer_left()){
-							impact_up2 = true;
-							impact_down2 = true;
-							impact_left2 = false;
-							impact_right2 = true;
-						}
-						else if(tank2.getPlayer_right()){
-							impact_up2 = true;
-							impact_down2 = true;
-							impact_left2 = true;
-							impact_right2 = false;
-						}
-					}
-				}
 		}
 		//Vẽ phần bảng điểm bên tay phải
 		g.setColor(Color.black);
@@ -288,33 +336,34 @@ public class Gameplay extends JPanel implements ActionListener
 		
 		g.drawString("Lives", 1070,180);
 		g.drawString("Player 1 : ", 1020, 210);
-		// g.drawString("Player 1:  "+ tank1.getHp(), 1030,180);
-		File file1 = new File("live_" + tank1.getHp() + ".png");
-		try {
-			Image image = ImageIO.read(file1);
-			g.drawImage(image, 1090, 195, tank1.getHp() * 20, 20, getFocusCycleRootAncestor());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		g.drawString("Player 2:  ", 1020,240);
-		File file2 = new File("live_" + tank2.getHp() + ".png");
-		try {
-			Image image = ImageIO.read(file2);
-			g.drawImage(image, 1090, 225, tank2.getHp() * 20, 20, getFocusCycleRootAncestor());
+		g.drawString("TIME REMAIN : " + countDownSeconds, 1020, 700);
+		File file1 = new File("live_" + (tank1.getHp()  > 5 ? 5 : tank1.getHp())+ ".png");	
+		try {	
+			Image image = ImageIO.read(file1);	
+			g.drawImage(image, 1090, 195, (tank1.getHp() > 5 ? 5 : tank1.getHp()) * 20, 20, getFocusCycleRootAncestor());	
+		} catch (IOException e) {	
+			// TODO Auto-generated catch block	
+			e.printStackTrace();	
+		}	
+		g.drawString("Player 2:  ", 1020,240);	
+		File file2 = new File("live_" + (tank2.getHp() > 5 ? 5 : tank2.getHp()) + ".png");	
+		try {	
+			Image image = ImageIO.read(file2);	
+			g.drawImage(image, 1090, 225, (tank2.getHp() > 5 ? 5 : tank2.getHp() )* 20, 20, getFocusCycleRootAncestor());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		//Xử lý nếu mạng của người 1 hoặc người 2 chỉ còn 0 (chết)
-		if(tank1.getHp() == 0 || tank2.getHp() == 0)
+		if(tank1.getHp() == 0 || tank2.getHp() == 0 || countDownSeconds <= 0)
 		{
+			
 			g.fillRect(0,0,1000,1000);
 			g.setColor(Color.white);
 			g.setFont(new Font("san-serif",Font.BOLD, 60));
 			g.drawString("Game Over", 300,300);
-			g.drawString("Player 2 Won", 280,380);
+			g.drawString("Player " + (tank1.getScore() > tank2.getScore() ? "1" : "2") + " Won", 280,380);
 			play = false;
 			g.setColor(Color.white);
 			g.setFont(new Font("sans-serif",Font.BOLD, 30));
@@ -338,7 +387,7 @@ public class Gameplay extends JPanel implements ActionListener
 		public void keyReleased(KeyEvent e) {}
 		
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode()== KeyEvent.VK_SPACE && (tank1.getHp() == 0 || tank2.getHp() == 0))
+			if(e.getKeyCode()== KeyEvent.VK_SPACE && ((tank1.getHp() == 0 || tank2.getHp() == 0) || countDownSeconds == 0))
 			{
 				br = new brick();
 				tank1.setPlayerX(50);
@@ -348,8 +397,8 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_right(false);
 				tank1.setPlayer_up(true);	
 				
-				tank2.setPlayerX(900);
-				tank2.setPlayerY(150);	
+				tank2.setPlayerX(550);
+				tank2.setPlayerY(0);	
 				tank2.setPlayer_up(false);
 				tank2.setPlayer_right(false);
 				tank2.setPlayer_left(false);
@@ -359,6 +408,8 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setHp(5);
 				tank2.setScore(0);
 				tank2.setHp(5);
+				countDownSeconds = 120;
+				countDonw();
 				play = true;
 				repaint();
 			}
@@ -368,9 +419,20 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_down(false);
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(false);
-
-				if(tank1.getPlayerY()>5 && impact_up1){
-					tank1.setPlayerY(tank1.getPlayerY()-10);
+				if(checkTankHitBrick(tank1.getPlayerX(),tank1.getPlayerY() - 10) == false){
+					if(tank1.getPlayerY()>5 && impact_up1){
+						tank1.setPlayerY(tank1.getPlayerY()-10);
+					}
+				}
+				// if(br.checktreeCollision(tank1.getPlayerX(),tank1.getPlayerY()-10)== false){	
+				// 	// if(tank1.getPlayerY()>5 && impact_up1){	
+				// 	// 	tank1.setPlayerY(tank1.getPlayerY()-10);	
+						
+				// 	}	
+				// 	// return true;	
+				// }	
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
+					tank1.setHp(tank1.getHp() >= 5 ? 5 : tank1.getHp() + 1);	
 				}
 				impact_up1 = true;
 			}
@@ -380,9 +442,13 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(false);
 
-				
-				if(tank1.getPlayerY()<700 && impact_down1){
-					tank1.setPlayerY(tank1.getPlayerY()+10);
+				if(checkTankHitBrick(tank1.getPlayerX(),tank1.getPlayerY() + 10) == false){
+					if(tank1.getPlayerY()<700 && impact_down1){
+						tank1.setPlayerY(tank1.getPlayerY()+10);
+					}
+				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
+					tank1.setHp(tank1.getHp() >= 5 ? 5 : tank1.getHp() + 1);	
 				}
 				impact_down1 = true;
 			}
@@ -392,9 +458,13 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(true);
 				tank1.setPlayer_right(false);
 
-
-				if(tank1.getPlayerX()>5 && impact_left1){
-					tank1.setPlayerX(tank1.getPlayerX()-10);
+				if(checkTankHitBrick(tank1.getPlayerX() - 10,tank1.getPlayerY()) == false){
+					if(tank1.getPlayerX()>5 && impact_left1){
+						tank1.setPlayerX(tank1.getPlayerX()-10);
+					}
+				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
+					tank1.setHp(tank1.getHp() >= 5 ? 5: tank1.getHp() + 1);	
 				}
 				impact_left1 = true;
 			}
@@ -404,8 +474,13 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(true);
 
-				if(tank1.getPlayerX()<950 && impact_right1){
-					tank1.setPlayerX(tank1.getPlayerX()+10);
+				if(checkTankHitBrick(tank1.getPlayerX() + 10,tank1.getPlayerY()) == false){
+					if(tank1.getPlayerX()<950 && impact_right1){
+						tank1.setPlayerX(tank1.getPlayerX()+10);
+					}
+				}
+				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
+					tank1.setHp(tank1.getHp() >= 5 ? 5 : tank1.getHp() + 1);	
 				}
 				impact_right1 = true;
 			}
@@ -454,8 +529,13 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerY()>5 && impact_up2){
-					tank2.setPlayerY(tank2.getPlayerY()-10);
+				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() - 10) == false){
+					if(tank2.getPlayerY()>5 && impact_up2){
+						tank2.setPlayerY(tank2.getPlayerY()-10);
+					}
+				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){	
+					tank2.setHp(tank2.getHp() >= 5 ? 5 : tank2.getHp() + 1);	
 				}
 				impact_up2 = true;
 			}
@@ -465,8 +545,13 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerY()<700 && impact_down2){
-					tank2.setPlayerY(tank2.getPlayerY()+10);
+				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() + 10) == false){
+					if(tank2.getPlayerY()<700 && impact_down2){
+						tank2.setPlayerY(tank2.getPlayerY()+10);
+					}
+				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){	
+					tank2.setHp(tank2.getHp() >= 5 ? 5 : tank2.getHp() + 1);	
 				}
 				impact_down2 = true;
 			}
@@ -476,8 +561,13 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(true);
 				tank2.setPlayer_right(false);
 
-				if(tank2.getPlayerX()>5 && impact_left2){
-					tank2.setPlayerX(tank2.getPlayerX()-10);
+				if(checkTankHitBrick(tank2.getPlayerX() - 10,tank2.getPlayerY()) == false){
+					if(tank2.getPlayerX()>5 && impact_left2){
+						tank2.setPlayerX(tank2.getPlayerX()-10);
+					}
+				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){	
+					tank2.setHp(tank2.getHp() >= 5 ? 5 : tank2.getHp() + 1);	
 				}
 				impact_left2 = true;
 			}
@@ -486,9 +576,14 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_down(false);
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(true);
-
-				if(tank2.getPlayerX()<950 && impact_right2){
-					tank2.setPlayerX(tank2.getPlayerX()+10);
+								
+				if(checkTankHitBrick(tank2.getPlayerX() + 10,tank2.getPlayerY()) == false){
+					if(tank2.getPlayerX()<950 && impact_right2){
+						tank2.setPlayerX(tank2.getPlayerX()+10);
+					}
+				}
+				if(br.checkitemCollision(tank2.getPlayerX(),tank2.getPlayerY())){	
+					tank2.setHp(tank2.getHp() >= 5 ? 5 : tank2.getHp() + 1);	
 				}
 				impact_right2 = true;
 			}
