@@ -334,22 +334,42 @@ public class Gameplay extends JPanel implements ActionListener
 		g.drawString("Player 2:  "+ tank2.getScore(), 1030,120);
 		// g.drawRect(1050, 100, tank1.getHp()*20, 20);;
 		
-		g.drawString("Lives", 1070,180);
-		g.drawString("Player 1 : ", 1020, 210);
-		g.drawString("TIME REMAIN : " + countDownSeconds, 1020, 700);
+		Font font = new Font("Arial", Font.BOLD, 25);
+		g.setFont(font);
+		g.drawString("Lives", 1085,175);
+		//g.drawString("Player 1 : ", 1020, 210);
+		File fileTank1 = new File("tank1up.png");
+		Image imageTanImage;
+		try {
+			imageTanImage = ImageIO.read(fileTank1);
+			g.drawImage(imageTanImage, 1020, 190, getFocusCycleRootAncestor());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		g.drawString("TIME REMAIN : " + countDownSeconds, 1015, 700);
 		File file1 = new File("live_" + (tank1.getHp()  > 5 ? 5 : tank1.getHp())+ ".png");	
 		try {	
 			Image image = ImageIO.read(file1);	
-			g.drawImage(image, 1090, 195, (tank1.getHp() > 5 ? 5 : tank1.getHp()) * 20, 20, getFocusCycleRootAncestor());	
+			g.drawImage(image, 1090, 205, (tank1.getHp() > 5 ? 5 : tank1.getHp()) * 20, 20, getFocusCycleRootAncestor());	
 		} catch (IOException e) {	
 			// TODO Auto-generated catch block	
 			e.printStackTrace();	
 		}	
-		g.drawString("Player 2:  ", 1020,240);	
+		//g.drawString("Player 2:  ", 1020,240);
+		File fileTank2 = new File("player2_tank_up.png");
+		Image imageTanImage2;
+		try {
+			imageTanImage2 = ImageIO.read(fileTank2);
+			g.drawImage(imageTanImage2, 1020, 250, getFocusCycleRootAncestor());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		File file2 = new File("live_" + (tank2.getHp() > 5 ? 5 : tank2.getHp()) + ".png");	
 		try {	
 			Image image = ImageIO.read(file2);	
-			g.drawImage(image, 1090, 225, (tank2.getHp() > 5 ? 5 : tank2.getHp() )* 20, 20, getFocusCycleRootAncestor());
+			g.drawImage(image, 1090, 265, (tank2.getHp() > 5 ? 5 : tank2.getHp() )* 20, 20, getFocusCycleRootAncestor());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -424,13 +444,7 @@ public class Gameplay extends JPanel implements ActionListener
 						tank1.setPlayerY(tank1.getPlayerY()-10);
 					}
 				}
-				// if(br.checktreeCollision(tank1.getPlayerX(),tank1.getPlayerY()-10)== false){	
-				// 	// if(tank1.getPlayerY()>5 && impact_up1){	
-				// 	// 	tank1.setPlayerY(tank1.getPlayerY()-10);	
-						
-				// 	}	
-				// 	// return true;	
-				// }	
+
 				if(br.checkitemCollision(tank1.getPlayerX(),tank1.getPlayerY())){	
 					tank1.setHp(tank1.getHp() >= 5 ? 5 : tank1.getHp() + 1);	
 				}
@@ -509,7 +523,7 @@ public class Gameplay extends JPanel implements ActionListener
 					tank1.setPlayer_shoot(true);
 				}
 			}
-
+			repaint();
 		}
 
 	}
@@ -612,6 +626,7 @@ public class Gameplay extends JPanel implements ActionListener
 					tank2.setPlayer_shoot(true);
 				}
 			}
+			repaint();
 		}
 	}
 }

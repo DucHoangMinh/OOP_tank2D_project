@@ -21,7 +21,7 @@ public class Main {
 		JFrame map=new JFrame();
         // Gameplay GamePlay = new Gameplay();
 		startMenu start = new startMenu(map);
-		map.setBounds(0, 0, 1250, 787);//kích cỡ
+		map.setBounds(0, 0, 1270, 787);//kích cỡ
 		map.setTitle("Tank 2D");	//tiêu đề
 		// map.getContentPane().setBackground(Color.gray);//nền
 		map.setResizable(false);//thu phóng

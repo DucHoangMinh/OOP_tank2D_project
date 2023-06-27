@@ -18,21 +18,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-public class guidePage extends JPanel{
+public class guidePage2 extends JPanel{
     private JFrame frame;
     
-    public guidePage(JFrame frame){
+    public guidePage2(JFrame frame){
         this.frame = frame;
         
         JButton backButton = new JButton("Trang chủ");
-        JButton switchButton = new JButton("Chuyển trang 1/2");
+        JButton switchButton = new JButton("Chuyển trang 2/2");
         JLabel guideLabel = new JLabel();
         
         //Setup ảnh
-        ImageIcon tankFire = new ImageIcon("tank fire.png");
-        Image image = tankFire.getImage();
-        Image newimage = image.getScaledInstance(1236, 780, java.awt.Image.SCALE_SMOOTH); //3 dòng trước đó để setup ảnh có kích thước hợp lý với label
-        guideLabel.setIcon(new ImageIcon(newimage));
+        ImageIcon tankGuide = new ImageIcon("tank guide.png");
+        Image image1 = tankGuide.getImage();
+        Image newimage1 = image1.getScaledInstance(1236, 780, java.awt.Image.SCALE_SMOOTH); //3 dòng trước đó để setup ảnh có kích thước hợp lý với label
+        guideLabel.setIcon(new ImageIcon(newimage1));
         
         //Set 
         guideLabel.setBounds(0, -70, 1250, 900);
@@ -90,8 +90,8 @@ public class guidePage extends JPanel{
 
         switchButton.addActionListener(e -> {
             this.setVisible(false);
-            guidePage2 guidePage2 = new guidePage2(frame);
-            frame.add(guidePage2);
+            guidePage guidePage = new guidePage(frame);
+            frame.add(guidePage);
             frame.repaint();
             frame.requestFocus();
         });
