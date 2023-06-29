@@ -106,9 +106,16 @@ public class Gameplay extends JPanel implements ActionListener
 				return true;
 			} 
 		}
+		for(int i = 0; i < br.treebricksXpod.length; i++){
+			if(new Rectangle(x, y, 50, 50).intersects(new
+			Rectangle(br.treebricksXpod[i], br.treebricksYpod[i], 50, 50))){
+				return true;
+			} 
+		}
 		
 		return false;
 	}
+	
 	public boolean checkTank1HitTank2(int x,int y) {
 		if(new Rectangle(x,y,50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
 			return true;
