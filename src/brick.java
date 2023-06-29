@@ -112,8 +112,6 @@ public class brick {
 		{
 			if(brickON[i]==1)
 			{
-				//Anh em tự search và tìm hiểu lớp Rectangle.Đại khái,lớp này sẽ tạo ra một hình chữ nhật tại tọa độ x,y và kích thước width,height
-				//Lớp này cũng hộ trợ một phương thức cực kỳ tiện là intersects để kiểm tra hai Rectangle có chạm vào nhau không,có thì trả về true
 				if(new Rectangle(x, y, 10, 10).intersects(new Rectangle(treebricksXpod[i], treebricksYpod[i], 50, 50)))
 				{	
 					//Nếu có va chạm,set cho trạng thái của cây bị va chạm trạng thái là 0,tức là nó sẽ không xuất hiện trên bản đồ nữa
@@ -126,28 +124,6 @@ public class brick {
 		
 		return collided;
 	}
-	// public boolean checktreeCollision(int x, int y)	
-	// {	
-	// 	boolean collided = false;//Biến này lưu trạng thái có va chạm không,nếu có set là true và trả về	
-	// 								//Không thì để là false	
-	// 	for(int i=0; i< brickON.length;i++)	
-	// 	{	
-	// 		if(brickON[i]==1)	
-	// 		{	
-	// 			//Anh em tự search và tìm hiểu lớp Rectangle.Đại khái,lớp này sẽ tạo ra một hình chữ nhật tại tọa độ x,y và kích thước width,height	
-	// 			//Lớp này cũng hộ trợ một phương thức cực kỳ tiện là intersects để kiểm tra hai Rectangle có chạm vào nhau không,có thì trả về true	
-	// 			if(new Rectangle(x, y, 50, 50).intersects(new Rectangle(treebricksXpod[i], treebricksYpod[i], 50, 50)))	
-	// 			{		
-	// 				//Nếu có va chạm,set cho trạng thái của cây bị va chạm trạng thái là 0,tức là nó sẽ không xuất hiện trên bản đồ nữa	
-						
-	// 				collided = true;	
-	// 				break;	
-	// 			}	
-	// 		}	
-	// 	}	
-			
-	// 	return collided;	
-	// }
 	
 	//Tương tự như cái trên,cái này cũng kiểm tra va chạm của đạn với gạch cứng.Tuy nhiên,nếu có va chạm,gạch
 	//cứng sẽ không biến mất như cây
@@ -164,21 +140,7 @@ public class brick {
 		}
 		return collided;
 	}
-	//check cay chan tank	
-	// public boolean checktreeCollision(int x, int y)	
-	// {	
-	// 	boolean collided = false;	
-	// 	for(int i=0; i< treebricksXpod.length;i++)	
-	// 	{			
-	// 		if(new Rectangle(x, y, 50, 50).intersects(new Rectangle(treebricksXpod[i], treebricksYpod[i], 50, 50)))	
-	// 		{			
-	// 			collided = true;	
-	// 			break;	
-	// 		}				
-	// 	}	
-	// 	return collided;	
-	// }	
-	//check ban vao item	
+
 	public boolean checkitemCollision(int x, int y)	
 	{	
 		boolean collided = false;//Biến này lưu trạng thái có va chạm không,nếu có set là true và trả về	

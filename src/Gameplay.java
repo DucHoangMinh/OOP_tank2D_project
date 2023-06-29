@@ -106,16 +106,19 @@ public class Gameplay extends JPanel implements ActionListener
 				return true;
 			} 
 		}
-		// for(int i=0; i< brickON.length;i++){	
-				
-		// 		if(new Rectangle(x, y, 50, 50).intersects(new	
-		// 	Rectangle(br.treebricksXPos[i], br.treebricksYPos[i], 50, 50))){	
-		// 		return true;	
-		// 	}	
-		// 	}	
-				
-			
 		
+		return false;
+	}
+	public boolean checkTank1HitTank2(int x,int y) {
+		if(new Rectangle(x,y,50,50).intersects(new Rectangle(tank2.getPlayerX(), tank2.getPlayerY(), 50, 50))){
+			return true;
+		}
+		return false;
+	}
+	public boolean checkTank2HitTank1(int x,int y) {
+		if(new Rectangle(x,y,50,50).intersects(new Rectangle(tank1.getPlayerX(), tank1.getPlayerY(), 50, 50))){
+			return true;
+		}
 		return false;
 	}
 	public void paint(Graphics g)
@@ -439,7 +442,7 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_down(false);
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(false);
-				if(checkTankHitBrick(tank1.getPlayerX(),tank1.getPlayerY() - 10) == false){
+				if(checkTankHitBrick(tank1.getPlayerX(),tank1.getPlayerY() - 10) == false && checkTank1HitTank2(tank1.getPlayerX(),tank1.getPlayerY() - 10) == false){
 					if(tank1.getPlayerY()>5 && impact_up1){
 						tank1.setPlayerY(tank1.getPlayerY()-10);
 					}
@@ -456,7 +459,7 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(false);
 
-				if(checkTankHitBrick(tank1.getPlayerX(),tank1.getPlayerY() + 10) == false){
+				if(checkTankHitBrick(tank1.getPlayerX(),tank1.getPlayerY() + 10) == false && checkTank1HitTank2(tank1.getPlayerX(),tank1.getPlayerY() + 10) == false){
 					if(tank1.getPlayerY()<700 && impact_down1){
 						tank1.setPlayerY(tank1.getPlayerY()+10);
 					}
@@ -472,7 +475,7 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(true);
 				tank1.setPlayer_right(false);
 
-				if(checkTankHitBrick(tank1.getPlayerX() - 10,tank1.getPlayerY()) == false){
+				if(checkTankHitBrick(tank1.getPlayerX() - 10,tank1.getPlayerY()) == false && checkTank1HitTank2(tank1.getPlayerX() - 10,tank1.getPlayerY()) == false){
 					if(tank1.getPlayerX()>5 && impact_left1){
 						tank1.setPlayerX(tank1.getPlayerX()-10);
 					}
@@ -488,7 +491,7 @@ public class Gameplay extends JPanel implements ActionListener
 				tank1.setPlayer_left(false);
 				tank1.setPlayer_right(true);
 
-				if(checkTankHitBrick(tank1.getPlayerX() + 10,tank1.getPlayerY()) == false){
+				if(checkTankHitBrick(tank1.getPlayerX() + 10,tank1.getPlayerY()) == false && checkTank1HitTank2(tank1.getPlayerX() + 10,tank1.getPlayerY()) == false){
 					if(tank1.getPlayerX()<950 && impact_right1){
 						tank1.setPlayerX(tank1.getPlayerX()+10);
 					}
@@ -543,7 +546,7 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(false);
 
-				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() - 10) == false){
+				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() - 10) == false && checkTank2HitTank1(tank2.getPlayerX(),tank2.getPlayerY() - 10) == false){
 					if(tank2.getPlayerY()>5 && impact_up2){
 						tank2.setPlayerY(tank2.getPlayerY()-10);
 					}
@@ -559,7 +562,7 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(false);
 
-				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() + 10) == false){
+				if(checkTankHitBrick(tank2.getPlayerX(),tank2.getPlayerY() + 10) == false && checkTank2HitTank1(tank2.getPlayerX(),tank2.getPlayerY() + 10) == false){
 					if(tank2.getPlayerY()<700 && impact_down2){
 						tank2.setPlayerY(tank2.getPlayerY()+10);
 					}
@@ -575,7 +578,7 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(true);
 				tank2.setPlayer_right(false);
 
-				if(checkTankHitBrick(tank2.getPlayerX() - 10,tank2.getPlayerY()) == false){
+				if(checkTankHitBrick(tank2.getPlayerX() - 10,tank2.getPlayerY()) == false && checkTank2HitTank1(tank2.getPlayerX() - 10,tank2.getPlayerY()) == false){
 					if(tank2.getPlayerX()>5 && impact_left2){
 						tank2.setPlayerX(tank2.getPlayerX()-10);
 					}
@@ -591,7 +594,7 @@ public class Gameplay extends JPanel implements ActionListener
 				tank2.setPlayer_left(false);
 				tank2.setPlayer_right(true);
 								
-				if(checkTankHitBrick(tank2.getPlayerX() + 10,tank2.getPlayerY()) == false){
+				if(checkTankHitBrick(tank2.getPlayerX() + 10,tank2.getPlayerY()) == false && checkTank2HitTank1(tank2.getPlayerX() + 10,tank2.getPlayerY()) == false){
 					if(tank2.getPlayerX()<950 && impact_right2){
 						tank2.setPlayerX(tank2.getPlayerX()+10);
 					}
@@ -602,7 +605,7 @@ public class Gameplay extends JPanel implements ActionListener
 				impact_right2 = true;
 			}
 
-			if(e.getKeyCode()== KeyEvent.VK_M)
+			if(e.getKeyCode()== KeyEvent.VK_P)
 			{
 				if(!tank2.isPlayer_shoot())
 				{
