@@ -25,12 +25,12 @@ public class startMenu extends JPanel implements ActionListener{
     private boolean toGame = false;
     private JFrame frame;
     
-    ImageIcon startImage = new ImageIcon("pngegg.png");
+    ImageIcon startImage = new ImageIcon("./img/pngegg.png");
     Image image = startImage.getImage();
     Image resizedImage = image.getScaledInstance(600, 400, Image.SCALE_SMOOTH);
     ImageIcon resizedImageIcon = new ImageIcon(resizedImage);
 
-    ImageIcon bulletOnWall = new ImageIcon("bullet_on_wall.png");
+    ImageIcon bulletOnWall = new ImageIcon("./img/bullet_on_wall.png");
     Image bulletOW = bulletOnWall.getImage();
     Image BOWresizedImage = bulletOW.getScaledInstance(300 , 300, Image.SCALE_SMOOTH);
     ImageIcon BOW = new ImageIcon(BOWresizedImage);

@@ -29,7 +29,7 @@ public class guidePage2 extends JPanel{
         JLabel guideLabel = new JLabel();
         
         //Setup ảnh
-        ImageIcon tankGuide = new ImageIcon("tank guide.png");
+        ImageIcon tankGuide = new ImageIcon("./img/tank guide.png");
         Image image1 = tankGuide.getImage();
         Image newimage1 = image1.getScaledInstance(1238, 775, java.awt.Image.SCALE_SMOOTH); //3 dòng trước đó để setup ảnh có kích thước hợp lý với label
         guideLabel.setIcon(new ImageIcon(newimage1));

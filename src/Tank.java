@@ -143,24 +143,24 @@ public class Tank{
     //phương thức vẽ tank 4 hướng
     public void paintTank1(Graphics g){
        if(player_up)
-            player_image = new ImageIcon("tank1up.png");
+            player_image = new ImageIcon("./img/tank1up.png");
         else if(player_down)
-            player_image = new ImageIcon("tank1down.png");
+            player_image = new ImageIcon("./img/tank1down.png");
         else if(player_left)
-            player_image = new ImageIcon("tank1left.png");
+            player_image = new ImageIcon("./img/tank1left.png");
         else
-            player_image = new ImageIcon("tank1right.png");
+            player_image = new ImageIcon("./img/tank1right.png");
     }
 
     public void paintTank2(Graphics g){
         if(player_up)
-             player_image = new ImageIcon("player2_tank_up.png");
+             player_image = new ImageIcon("./img/player2_tank_up.png");
          else if(player_down)
-             player_image = new ImageIcon("player2_tank_down.png");
+             player_image = new ImageIcon("./img/player2_tank_down.png");
          else if(player_left)
-             player_image = new ImageIcon("player2_tank_left.png");
+             player_image = new ImageIcon("./img/player2_tank_left.png");
          else
-             player_image = new ImageIcon("player2_tank_right.png");
+             player_image = new ImageIcon("./img/player2_tank_right.png");
     }
 
     

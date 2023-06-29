@@ -29,7 +29,7 @@ public class Main {
 		map.setVisible(true);//thu phóng
         map.setLocationRelativeTo(null);// frame luôns ở chính giữa
         map.add(start);
-        ImageIcon image= new ImageIcon("logo.png", null);// creat an ImageIcon
+        ImageIcon image= new ImageIcon("./img/logo.png", null);// creat an ImageIcon
     	map.setIconImage(image.getImage());// logo
 		//test new branch
 	}

@@ -46,10 +46,10 @@ public class brick {
 	//Khai báo địa chỉ hình ảnh của nước, gạch cứng, cây
 	public brick()	
 	{
-		breakBrickImage=new ImageIcon("water1.png");
-		solidBrickImage=new ImageIcon("wall.jpg");	
-		treeBrickImage=new ImageIcon("tree2new.png");
-		itemBrickImage=new ImageIcon("item_1.png");
+		breakBrickImage=new ImageIcon("./img/water1.png");
+		solidBrickImage=new ImageIcon("./img/wall.jpg");	
+		treeBrickImage=new ImageIcon("./img/tree2new.png");
+		itemBrickImage=new ImageIcon("./img/item_1.png");
 
 		//Vòng lặp này set cho trạng thái tất cả "cây" là 1,tức là cho trạng thái của chúng đang là hiện lên
 		for(int i=0; i < brickON.length;i++)
